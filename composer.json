@@ -1,7 +1,20 @@
 {
-    "description": "",
+    "description": "Random texts to be used as styleguide props",
     "type": "neos-package",
     "name": "sitegeist/chitchat",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Melanie Wüst",
+            "email": "wuest@sitegeist.de",
+            "role": "Developer"
+        },
+        {
+            "name": "Martin Ficzel",
+            "email": "ficzel@sitegeist.de",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "neos/flow": "*"
     },
