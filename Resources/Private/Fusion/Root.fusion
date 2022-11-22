@@ -1,0 +1,6 @@
+prototype(Sitegeist.ChitChat:Sentence) {
+  @class = "Sitegeist\\ChitChat\\FusionObjects\\SentenceImplementation"
+
+  words = 10
+  deviation = 5
+}
