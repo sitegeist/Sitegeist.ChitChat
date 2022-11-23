@@ -9,12 +9,12 @@ on:
       - 'main'
 jobs:
   test:
-    name: "Test (PHP ${{ matrix.php-versions }}, Flow ${{ matrix.flow-versions }})"
+    name: "Test (PHP ${{ matrix.php-versions }}, Neos ${{ matrix.neos-versions }})"
 
     strategy:
       fail-fast: false
       matrix:
-        php-versions: [ '8.1' ]
+        php-versions: [ '8.1', '8.0']
         neos-versions: [ '8.0' ]
 
     runs-on: ubuntu-latest

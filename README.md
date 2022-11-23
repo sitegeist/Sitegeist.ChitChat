@@ -9,7 +9,7 @@ tend to overshadow the actual component and often do not provide enough diversio
 ChitChat generates pseudo random texts that can be used in styleguide props. The texts are generated uniquely for each
 insertion point (fusion path) using pseudo random numbers.
 
-The styleguide only specifies that a headline follows by two paragraphs and a list is needed. **No need to copy amd past the 
+The styleguide only specifies that a headline follows by two paragraphs and a list is needed. **No need to copy and paste the 
 same lorem ipsum texts over and over again!**
 
 ```neosfusion
