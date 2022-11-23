@@ -8,7 +8,7 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Fusion\FusionObjects\AbstractFusionObject;
 use Sitegeist\ChitChat\Domain\PredictableTextGenerator;
 
-class SentenceImplementation extends AbstractFusionObject
+class HeadlineImplementation extends AbstractFusionObject
 {
     public function evaluate()
     {
@@ -17,7 +17,8 @@ class SentenceImplementation extends AbstractFusionObject
         $seed = $this->path . ($this->fusionValue('seed') ?: '');
         $words = intval($this->fusionValue('words') ?: 10);
         $deviation = intval($this->fusionValue('deviation') ?: 5);
+        $level = intval($this->fusionValue('level') ?: 1);
 
-        return $generator->sentence($seed, $words, $deviation);
+        return '<h' . $level . '>' . $generator->sentence($seed, $words, $deviation) . '</h' . $level . '>' ;
     }
 }

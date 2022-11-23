@@ -1,5 +1,35 @@
+prototype(Sitegeist.ChitChat:Headline) {
+  @class = "Sitegeist\\ChitChat\\FusionObjects\\HeadlineImplementation"
+
+  words = 10
+  deviation = 5
+  level = 1
+}
+prototype(Sitegeist.ChitChat:Paragraph) {
+  @class = "Sitegeist\\ChitChat\\FusionObjects\\ParagraphImplementation"
+
+  sentences = 10
+  deviation = 5
+}
+
+prototype(Sitegeist.ChitChat:List) {
+  @class = "Sitegeist\\ChitChat\\FusionObjects\\ListImplementation"
+
+  items = 10
+  ordered = false
+  deviation = 5
+}
+
 prototype(Sitegeist.ChitChat:Sentence) {
   @class = "Sitegeist\\ChitChat\\FusionObjects\\SentenceImplementation"
+
+  words = 10
+  deviation = 5
+}
+
+
+prototype(Sitegeist.ChitChat:Words) {
+  @class = "Sitegeist\\ChitChat\\FusionObjects\\WordsImplementation"
 
   words = 10
   deviation = 5
