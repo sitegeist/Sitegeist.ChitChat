@@ -1,36 +1,102 @@
-prototype(Sitegeist.ChitChat:Headline) {
-  @class = "Sitegeist\\ChitChat\\FusionObjects\\HeadlineImplementation"
-
-  words = 10
-  deviation = 5
-  level = 1
-}
 prototype(Sitegeist.ChitChat:Paragraph) {
   @class = "Sitegeist\\ChitChat\\FusionObjects\\ParagraphImplementation"
 
-  sentences = 10
-  deviation = 5
+  length = 1000
+  deviation = 500
 }
 
-prototype(Sitegeist.ChitChat:List) {
-  @class = "Sitegeist\\ChitChat\\FusionObjects\\ListImplementation"
+prototype(Sitegeist.ChitChat:Sentences) {
+  @class = "Sitegeist\\ChitChat\\FusionObjects\\SentencesImplementation"
 
-  items = 10
-  ordered = false
-  deviation = 5
+  length = 1000
+  deviation = 500
 }
 
 prototype(Sitegeist.ChitChat:Sentence) {
   @class = "Sitegeist\\ChitChat\\FusionObjects\\SentenceImplementation"
 
-  words = 10
-  deviation = 5
+  length = 60
+  deviation = 20
 }
-
 
 prototype(Sitegeist.ChitChat:Words) {
   @class = "Sitegeist\\ChitChat\\FusionObjects\\WordsImplementation"
 
-  words = 10
-  deviation = 5
+  length = 60
+  deviation = 20
+}
+
+prototype(Sitegeist.ChitChat:H1) < prototype(Neos.Fusion:Component) {
+  renderer = Neos.Fusion:Tag {
+    tagName = 'h1'
+    content = Sitegeist.ChitChat:Sentence {
+      @apply.props = ${props}
+    }
+  }
+}
+
+prototype(Sitegeist.ChitChat:H2) < prototype(Neos.Fusion:Component) {
+  renderer = Neos.Fusion:Tag {
+    tagName = 'h2'
+    content = Sitegeist.ChitChat:Sentence {
+      @apply.props = ${props}
+    }
+  }
+}
+
+prototype(Sitegeist.ChitChat:H3) < prototype(Neos.Fusion:Component) {
+  renderer = Neos.Fusion:Tag {
+    tagName = 'h3'
+    content = Sitegeist.ChitChat:Sentence {
+      @apply.props = ${props}
+    }
+  }
+}
+
+prototype(Sitegeist.ChitChat:H4) < prototype(Neos.Fusion:Component) {
+  renderer = Neos.Fusion:Tag {
+    tagName = 'h4'
+    content = Sitegeist.ChitChat:Sentence {
+      @apply.props = ${props}
+    }
+  }
+}
+
+prototype(Sitegeist.ChitChat:P) < prototype(Neos.Fusion:Component) {
+  renderer = Neos.Fusion:Tag {
+    tagName = 'p'
+    content = Sitegeist.ChitChat:Paragraph {
+      @apply.props = ${props}
+    }
+  }
+}
+
+prototype(Sitegeist.ChitChat:UL) < prototype(Neos.Fusion:Component) {
+  renderer = Neos.Fusion:Tag {
+    tagName = 'ul'
+    content = Neos.Fusion:Loop {
+      items = Sitegeist.ChitChat:Sentences {
+        @apply.props = ${props}
+      }
+      itemRenderer = Neos.Fusion:Tag {
+        tagName = 'li'
+        content = ${item}
+      }
+    }
+  }
+}
+
+prototype(Sitegeist.ChitChat:OL) < prototype(Neos.Fusion:Component) {
+  renderer = Neos.Fusion:Tag {
+    tagName = 'ol'
+    content = Neos.Fusion:Loop {
+      items = Sitegeist.ChitChat:Sentences {
+        @apply.props = ${props}
+      }
+      itemRenderer = Neos.Fusion:Tag {
+        tagName = 'li'
+        content = ${item}
+      }
+    }
+  }
 }

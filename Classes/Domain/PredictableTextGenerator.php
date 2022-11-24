@@ -27,99 +27,119 @@ class PredictableTextGenerator
         $this->words = is_array($words) ? array_values($words) :  [];
     }
 
-    public function paragraph(string $seed, int $sentences = 10, int $deviation = 0): string
+    /**
+     * @return string
+     */
+    public function paragraph(string $seed, int $length, int $deviation, FormatOption ...$formatOptions): string
     {
-        $this->initializeRandomness($seed);
-        $result = implode(' ', $this->sentenceArray($sentences, $deviation));
-        $this->resetRandomness();
-        return $result;
+        $this->initializeDeterministicCoincidence($seed);
+        $sentences = $this->sentencesInternal($length, $deviation, ...$formatOptions);
+        return implode(' ', $sentences);
     }
 
     /**
      * @return array<int,string>
      */
-    public function sentences(string $seed, int $items = 10, int $deviation = 0): array
+    public function sentences(string $seed, int $length, int $deviation, FormatOption ...$formatOptions): array
     {
-        $this->initializeRandomness($seed);
-        $items = $this->sentenceArray($items, $deviation);
-        $this->resetRandomness();
-        return $items;
+        $this->initializeDeterministicCoincidence($seed);
+        $sentences = $this->sentencesInternal($length, $deviation, ...$formatOptions);
+        return $sentences;
     }
 
-    public function sentence(string $seed, int $words = 10, int $deviation = 0): string
+    /**
+     * @return string
+     */
+    public function sentence(string $seed, int $length, int $deviation, FormatOption ...$formatOptions): string
     {
-        $this->initializeRandomness($seed);
-        $result = implode(' ', $this->wordArray($words, $deviation));
-        $this->resetRandomness();
-        return $result;
+        $this->initializeDeterministicCoincidence($seed);
+        $result = $this->wordsInternal($length, $deviation, ...$formatOptions);
+        return ucfirst(implode(' ', $result));
     }
 
     /**
      * @return array<int,string>
      */
-    public function words(string $seed, int $words = 10, int $deviation = 0): array
+    public function words(string $seed, int $length, int $deviation): array
     {
-        $this->initializeRandomness($seed);
-        $result = $this->wordArray($words, $deviation);
-        $this->resetRandomness();
+        $this->initializeDeterministicCoincidence($seed);
+        $result = $this->wordsInternal($length, $deviation);
         return $result;
     }
 
-    protected function initializeRandomness(string $seed): void
+
+    protected function initializeDeterministicCoincidence(string $seed): void
     {
         mt_srand(crc32($seed));
     }
 
-    protected function resetRandomness(): void
-    {
-        mt_srand();
-    }
-
     /**
-     * @return array<int,string>
+     * @return string[]
      */
-    protected function sentenceArray(int $number, int $deviation = 0): array
+    protected function sentencesInternal(int $length, int $deviation, FormatOption ...$formatOptions): array
     {
-        if ($deviation) {
-            $actualNumber = $number + mt_rand(-1 * $deviation, $deviation);
+        if ($deviation > 0) {
+            $actualLength = $length + mt_rand(-1 * $deviation, $deviation);
         } else {
-            $actualNumber = $number;
+            $actualLength = $length;
         }
+
+        $chars = 0;
         $sentences = [];
-        for ($i = 0; $i < $actualNumber; $i++) {
-            $sentences[] = ucfirst(implode(' ', $this->wordArray(10, $deviation))) . '.';
+
+        while ($chars <= $actualLength) {
+            $words = $this->wordsInternal(60, 20, ...$formatOptions);
+            $sentence = ucfirst(implode(' ', $words)) . '.';
+            $sentences[] = $sentence;
+            $chars += strlen($sentence);
         }
+
         return $sentences;
     }
 
     /**
      * @return array<int,string>
      */
-    protected function wordArray(int $number, int $deviation = 0): array
+    protected function wordsInternal(int $length, int $deviation, FormatOption ...$formatOptions): array
     {
-        if ($deviation) {
-            $actualWords = $number + mt_rand(-1 * $deviation, $deviation);
+        if ($deviation > 0) {
+            $actualLength = $length + mt_rand(-1 * $deviation, $deviation);
         } else {
-            $actualWords = $number;
+            $actualLength = $length;
         }
+
+        $chars = 0;
+        $words = [];
 
         /** @phpstan-ignore-next-line */
         $openerKey = mt_rand(array_key_first($this->opener), array_key_last($this->opener));
-        $wordKeys = [];
-        for ($i = 0; $i < $actualWords; $i++) {
-            /** @phpstan-ignore-next-line */
-            $wordKeys[] = mt_rand(array_key_first($this->words), array_key_last($this->words));
-        }
+        $words[] = ucfirst($this->opener[$openerKey]);
+        $chars += strlen($this->opener[$openerKey]);
 
-        $words = [ucfirst($this->opener[$openerKey])];
-        foreach ($wordKeys as $wordKey) {
+        while ($chars <= $actualLength) {
+            /** @phpstan-ignore-next-line */
+            $wordKey = mt_rand(array_key_first($this->words), array_key_last($this->words));
             $uppercase = mt_rand(0, 4);
             if ($uppercase === 0) {
                 $words[] = ucfirst($this->words[$wordKey]);
             } else {
                 $words[] = $this->words[$wordKey];
             }
+            $chars += strlen($this->words[$wordKey]);
         }
+
+        if ($formatOptions) {
+            foreach ($words as $key => $value) {
+                $formatOption = $formatOptions[mt_rand(0, count($formatOptions) + 20)] ?? null;
+                $words[$key] = match ($formatOption) {
+                    FormatOption::Links => '<a href="#">' . $value . '</a>',
+                    FormatOption::Bold => '<strong>' . $value . '</strong>',
+                    FormatOption::Italic => '<i>' . $value . '</i>',
+                    default => $value
+                };
+            }
+        }
+
         return $words;
     }
 }

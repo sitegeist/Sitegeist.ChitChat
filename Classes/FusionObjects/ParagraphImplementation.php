@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace Sitegeist\ChitChat\FusionObjects;
 
-use Neos\Flow\Annotations as Flow;
 use Neos\Fusion\FusionObjects\AbstractFusionObject;
 use Sitegeist\ChitChat\Domain\PredictableTextGenerator;
 
 class ParagraphImplementation extends AbstractFusionObject
 {
-    public function evaluate()
+    use GetFormatOptionsTrait;
+
+    public function evaluate(): string
     {
         $generator = new PredictableTextGenerator();
 
         $seed = $this->path . ($this->fusionValue('seed') ?: '');
-        $sentences = intval($this->fusionValue('sentences') ?: 10);
-        $deviation = intval($this->fusionValue('deviation') ?: 5);
+        $length = intval($this->fusionValue('length') ?: 1000);
+        $deviation = intval($this->fusionValue('deviation') ?: 500);
+        $formatOptions = $this->getFormatOptions();
 
-        return '<p>' . $generator->paragraph($seed, $sentences, $deviation) . '</p>';
+        return $generator->paragraph($seed, $length, $deviation, ...$formatOptions);
     }
 }

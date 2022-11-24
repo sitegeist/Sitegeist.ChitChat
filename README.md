@@ -14,10 +14,10 @@ same lorem ipsum texts over and over again!**
 
 ```neosfusion
 dummytext = afx`
-    <Sitegeist.ChitChat:Headline level="2" />
-    <Sitegeist.ChitChat:Paragraph />
-    <Sitegeist.ChitChat:Paragraph />
-    <Sitegeist.ChitChat:List />
+    <Sitegeist.ChitChat:H2 />
+    <Sitegeist.ChitChat:P />
+    <Sitegeist.ChitChat:P />
+    <Sitegeist.ChitChat:OL />
 `
 ```
 
@@ -40,22 +40,20 @@ We use semantic-versioning so every breaking change will increase the major-vers
 
 ## Usage
 
-
-
 ```neosfusion
 prototype(Vendor.Site:ChitChat) < prototype(Neos.Fusion:Component) {
     @styleguide {
         title = "ChitChat"
         props.text = afx`
-            <Sitegeist.ChitChat:Headline level="1" />
-            <Sitegeist.ChitChat:Headline level="2" />
-            <Sitegeist.ChitChat:Paragraph />
-            <Sitegeist.ChitChat:Paragraph />
-            <Sitegeist.ChitChat:Paragraph />
-            <Sitegeist.ChitChat:Headline level="3" />
-            <Sitegeist.ChitChat:List />
-            <Sitegeist.ChitChat:Headline level="3" />
-            <Sitegeist.ChitChat:List ordered />
+            <Sitegeist.ChitChat:H1 />
+            <Sitegeist.ChitChat:H2 length={120} />
+            <Sitegeist.ChitChat:P links italic bold />
+            <Sitegeist.ChitChat:P links italic bold />
+            <Sitegeist.ChitChat:P />
+            <Sitegeist.ChitChat:H3 />
+            <Sitegeist.ChitChat:UL />
+            <Sitegeist.ChitChat:H3 />
+            <Sitegeist.ChitChat:OL />
         `
     }
 
@@ -67,6 +65,40 @@ prototype(Vendor.Site:ChitChat) < prototype(Neos.Fusion:Component) {
 }
 ```
 
+### Fusion Prototypes
+
+- `Sitegeist.ChitChat:H1`:  (string) A sentence in a h1-tag
+- `Sitegeist.ChitChat:H2`:  (string) A sentence in a h2-tag
+- `Sitegeist.ChitChat:H3`:  (string) A sentence in a h3-tag
+- `Sitegeist.ChitChat:H4`:  (string) A sentence in a h4-tag
+- `Sitegeist.ChitChat:P`:  (string) A sentence in a p-tag
+- `Sitegeist.ChitChat:UL`:  (string) Multiple sentences as unordered list.
+- `Sitegeist.ChitChat:OL`:  (string) Multiple sentences as ordered list.
+
+The prototypes have the following properties, all are optional:
+
+- `seed` (string|null) the source of randomness in addition to the fusion path
+- `length` (int) the length the text should approximately have
+- `deviation` (int) the deviation on length to be used between consecutive items
+
+- `link` (bool) add links to some items (`<a hraf="#">...</s>`)
+- `bold` (bool) make some items bold (`<strong>...</strong>`)
+- `italic` (bool) make some items italic (`<i>...</i>`)
+
+### Base Prototypes 
+
+The following Prototypes generate texts of one or multiple sentences. 
+- `Sitegeist.ChitChat:Paragraph`:  (string) textblock containing multiple sentences
+- `Sitegeist.ChitChat:Sentence `:  (string) sentence containing multiple words
+
+The following prototypes generate arrays of strings and are handy to create  
+lists and menu dummys.
+- `Sitegeist.ChitChat:Sentences`:  (array) multiple sentences
+- `Sitegeist.ChitChat:Words`:  (array) multiple words
+
+The common properties are supported here aswell.
+
+ 
 ## Contribution
 
 We will gladly accept contributions. Please send us pull requests.

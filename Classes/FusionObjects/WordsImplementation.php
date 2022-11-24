@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace Sitegeist\ChitChat\FusionObjects;
 
-use Neos\Flow\Annotations as Flow;
 use Neos\Fusion\FusionObjects\AbstractFusionObject;
 use Sitegeist\ChitChat\Domain\PredictableTextGenerator;
 
 class WordsImplementation extends AbstractFusionObject
 {
-    public function evaluate()
+    /**
+     * @return string[]
+     */
+    public function evaluate(): array
     {
         $generator = new PredictableTextGenerator();
 
         $seed = $this->path . ($this->fusionValue('seed') ?: '');
-        $words = intval($this->fusionValue('words') ?: 10);
+        $length = intval($this->fusionValue('length') ?: 10);
         $deviation = intval($this->fusionValue('deviation') ?: 5);
 
-        return $generator->words($seed, $words, $deviation);
+        return $generator->words($seed, $length, $deviation);
     }
 }

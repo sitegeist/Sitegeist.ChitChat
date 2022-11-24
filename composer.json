@@ -19,6 +19,7 @@
         "neos/fusion": "~8.0 || 8.2.x-dev || dev-main || dev-master"
     },
     "require-dev": {
+        "php": "^8.1",
         "phpunit/phpunit": "^9.5",
         "phpstan/phpstan": "^1.8",
         "squizlabs/php_codesniffer": "^3.7"

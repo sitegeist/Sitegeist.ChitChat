@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sitegeist\ChitChat\Tests\Utility;
 
 use PHPUnit\Framework\TestCase;
+use Sitegeist\ChitChat\Domain\FormatOption;
 use Sitegeist\ChitChat\Domain\PredictableTextGenerator;
 use Sitegeist\Noderobis\Utility\ConfigurationUtility;
 
@@ -18,8 +19,8 @@ class PredictableTextGeneratorTest extends TestCase
     {
         $generator = $this->getGenerator();
         $this->assertSame(
-            ['Dolor', 'eget', 'himenaeos', 'est', 'habitant', 'Eget', 'Elementum', 'facilisis', 'laoreet', 'fames', 'Justo'],
-            $generator->words('nudelsuppe', 10, 5)
+            ['Dolor', 'eget', 'est', 'eget', 'Facilisis', 'fames', 'faucibus', 'himenaeos', 'Etiam', 'felis', 'Fusce', 'Hac'],
+            $generator->words('nudelsuppe', 60, 20)
         );
     }
 
