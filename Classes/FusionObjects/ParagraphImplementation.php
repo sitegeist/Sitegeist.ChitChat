@@ -17,7 +17,7 @@ class ParagraphImplementation extends AbstractFusionObject
 
         $seed = $this->path . ($this->fusionValue('seed') ?: '');
         $length = intval($this->fusionValue('length') ?: 1000);
-        $deviation = intval($this->fusionValue('deviation') ?: 500);
+        $deviation = floatval($this->fusionValue('deviation') ?: .5);
         $formatOptions = $this->getFormatOptions();
 
         return $generator->paragraph($seed, $length, $deviation, ...$formatOptions);

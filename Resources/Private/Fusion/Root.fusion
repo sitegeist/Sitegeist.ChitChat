@@ -2,28 +2,28 @@ prototype(Sitegeist.ChitChat:Paragraph) {
   @class = "Sitegeist\\ChitChat\\FusionObjects\\ParagraphImplementation"
 
   length = 1000
-  deviation = 500
+  deviation = 0.5
 }
 
 prototype(Sitegeist.ChitChat:Sentences) {
   @class = "Sitegeist\\ChitChat\\FusionObjects\\SentencesImplementation"
 
   length = 1000
-  deviation = 500
+  deviation = 0.5
 }
 
 prototype(Sitegeist.ChitChat:Sentence) {
   @class = "Sitegeist\\ChitChat\\FusionObjects\\SentenceImplementation"
 
   length = 60
-  deviation = 20
+  deviation = 0.5
 }
 
 prototype(Sitegeist.ChitChat:Words) {
   @class = "Sitegeist\\ChitChat\\FusionObjects\\WordsImplementation"
 
   length = 60
-  deviation = 20
+  deviation = 0.5
 }
 
 prototype(Sitegeist.ChitChat:H1) < prototype(Neos.Fusion:Component) {

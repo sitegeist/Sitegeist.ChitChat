@@ -17,7 +17,7 @@ class SentenceImplementation extends AbstractFusionObject
 
         $seed = $this->path . ($this->fusionValue('seed') ?: '');
         $length = intval($this->fusionValue('length') ?: 10);
-        $deviation = intval($this->fusionValue('deviation') ?: 5);
+        $deviation = floatval($this->fusionValue('deviation') ?: .5);
         $formatOptions = $this->getFormatOptions();
 
         return $generator->sentence($seed, $length, $deviation, ...$formatOptions);

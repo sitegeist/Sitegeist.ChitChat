@@ -1,8 +1,6 @@
 # Sitegeist.ChitChat
 ## Deterministic randomized text generator for styleguide props 
 
-!!! This package is work in progress ... everything in here might change anytime !!!
-
 Presentational components for the monocle styleguide tend to have longish @styleguide.props that are hard to maintain, 
 tend to overshadow the actual component and often do not provide enough diversion to actually test different text lengths.
 
@@ -14,10 +12,11 @@ same lorem ipsum texts over and over again!**
 
 ```neosfusion
 dummytext = afx`
-    <Sitegeist.ChitChat:H2 />
-    <Sitegeist.ChitChat:P />
-    <Sitegeist.ChitChat:P />
-    <Sitegeist.ChitChat:OL />
+  <Sitegeist.ChitChat:H2 italic />
+  <Sitegeist.ChitChat:H3 />
+  <Sitegeist.ChitChat:P links bold />
+  <Sitegeist.ChitChat:P length={500} />
+  <Sitegeist.ChitChat:OL links />
 `
 ```
 
@@ -45,15 +44,15 @@ prototype(Vendor.Site:ChitChat) < prototype(Neos.Fusion:Component) {
     @styleguide {
         title = "ChitChat"
         props.text = afx`
-            <Sitegeist.ChitChat:H1 />
+            <Sitegeist.ChitChat:H1 italic />
             <Sitegeist.ChitChat:H2 length={120} />
             <Sitegeist.ChitChat:P links italic bold />
             <Sitegeist.ChitChat:P links italic bold />
             <Sitegeist.ChitChat:P />
             <Sitegeist.ChitChat:H3 />
-            <Sitegeist.ChitChat:UL />
+            <Sitegeist.ChitChat:UL links />
             <Sitegeist.ChitChat:H3 />
-            <Sitegeist.ChitChat:OL />
+            <Sitegeist.ChitChat:OL links />
         `
     }
 

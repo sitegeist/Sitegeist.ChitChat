@@ -19,8 +19,8 @@ class SentencesImplementation extends AbstractFusionObject
         $generator = new PredictableTextGenerator();
 
         $seed = $this->path . ($this->fusionValue('seed') ?: '');
-        $length = intval($this->fusionValue('length') ?: 10);
-        $deviation = intval($this->fusionValue('deviation') ?: 5);
+        $length = intval($this->fusionValue('length') ?: 1000);
+        $deviation = floatval($this->fusionValue('deviation') ?: .5);
         $formatOptions = $this->getFormatOptions();
 
         return $generator->sentences($seed, $length, $deviation, ...$formatOptions);

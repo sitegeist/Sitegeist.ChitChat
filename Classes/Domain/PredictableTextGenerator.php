@@ -30,7 +30,7 @@ class PredictableTextGenerator
     /**
      * @return string
      */
-    public function paragraph(string $seed, int $length, int $deviation, FormatOption ...$formatOptions): string
+    public function paragraph(string $seed, int $length, ?float $deviation, FormatOption ...$formatOptions): string
     {
         $this->initializeDeterministicCoincidence($seed);
         $sentences = $this->sentencesInternal($length, $deviation, ...$formatOptions);
@@ -40,7 +40,7 @@ class PredictableTextGenerator
     /**
      * @return array<int,string>
      */
-    public function sentences(string $seed, int $length, int $deviation, FormatOption ...$formatOptions): array
+    public function sentences(string $seed, int $length, ?float $deviation, FormatOption ...$formatOptions): array
     {
         $this->initializeDeterministicCoincidence($seed);
         $sentences = $this->sentencesInternal($length, $deviation, ...$formatOptions);
@@ -50,7 +50,7 @@ class PredictableTextGenerator
     /**
      * @return string
      */
-    public function sentence(string $seed, int $length, int $deviation, FormatOption ...$formatOptions): string
+    public function sentence(string $seed, int $length, ?float $deviation, FormatOption ...$formatOptions): string
     {
         $this->initializeDeterministicCoincidence($seed);
         $result = $this->wordsInternal($length, $deviation, ...$formatOptions);
@@ -60,7 +60,7 @@ class PredictableTextGenerator
     /**
      * @return array<int,string>
      */
-    public function words(string $seed, int $length, int $deviation): array
+    public function words(string $seed, int $length, ?float $deviation): array
     {
         $this->initializeDeterministicCoincidence($seed);
         $result = $this->wordsInternal($length, $deviation);
@@ -76,10 +76,11 @@ class PredictableTextGenerator
     /**
      * @return string[]
      */
-    protected function sentencesInternal(int $length, int $deviation, FormatOption ...$formatOptions): array
+    protected function sentencesInternal(int $length, ?float $deviation, FormatOption ...$formatOptions): array
     {
-        if ($deviation > 0) {
-            $actualLength = $length + mt_rand(-1 * $deviation, $deviation);
+        if ($deviation && $deviation > 0) {
+            $maxDist = (int) floor($length * $deviation);
+            $actualLength = $length + mt_rand(-1 * $maxDist, $maxDist);
         } else {
             $actualLength = $length;
         }
@@ -88,7 +89,7 @@ class PredictableTextGenerator
         $sentences = [];
 
         while ($chars <= $actualLength) {
-            $words = $this->wordsInternal(60, 20, ...$formatOptions);
+            $words = $this->wordsInternal(60, $deviation, ...$formatOptions);
             $sentence = ucfirst(implode(' ', $words)) . '.';
             $sentences[] = $sentence;
             $chars += strlen($sentence);
@@ -100,14 +101,16 @@ class PredictableTextGenerator
     /**
      * @return array<int,string>
      */
-    protected function wordsInternal(int $length, int $deviation, FormatOption ...$formatOptions): array
+    protected function wordsInternal(int $length, ?float $deviation, FormatOption ...$formatOptions): array
     {
-        if ($deviation > 0) {
-            $actualLength = $length + mt_rand(-1 * $deviation, $deviation);
+
+        if ($deviation && $deviation > 0) {
+            $maxDist = (int) floor($length * $deviation);
+            $actualLength = $length + mt_rand(-1 * $maxDist, $maxDist);
         } else {
             $actualLength = $length;
         }
-
+// \Neos\Flow\var_dump([$length, $deviation, $actualLength]);
         $chars = 0;
         $words = [];
 

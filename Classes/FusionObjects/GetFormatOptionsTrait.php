@@ -14,7 +14,7 @@ trait GetFormatOptionsTrait
     protected function getFormatOptions(): array
     {
         $formatOptions = [];
-        if ($this->fusionValue('link')) {
+        if ($this->fusionValue('links')) {
             $formatOptions[] = FormatOption::Links;
         }
         if ($this->fusionValue('italic')) {
