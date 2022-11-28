@@ -33,7 +33,7 @@ class PredictableTextGenerator
     public function paragraph(string $seed, int $length, ?float $deviation, FormatOption ...$formatOptions): string
     {
         $this->initializeDeterministicCoincidence($seed);
-        $sentences = $this->sentencesInternal($length, $deviation, ...$formatOptions);
+        $sentences = $this->sentencesInternal($length, $deviation, false, ...$formatOptions);
         return implode(' ', $sentences);
     }
 
@@ -43,7 +43,7 @@ class PredictableTextGenerator
     public function sentences(string $seed, int $length, ?float $deviation, FormatOption ...$formatOptions): array
     {
         $this->initializeDeterministicCoincidence($seed);
-        $sentences = $this->sentencesInternal($length, $deviation, ...$formatOptions);
+        $sentences = $this->sentencesInternal($length, $deviation, false, ...$formatOptions);
         return $sentences;
     }
 
@@ -53,7 +53,7 @@ class PredictableTextGenerator
     public function sentence(string $seed, int $length, ?float $deviation, FormatOption ...$formatOptions): string
     {
         $this->initializeDeterministicCoincidence($seed);
-        $result = $this->wordsInternal($length, $deviation, ...$formatOptions);
+        $result = $this->wordsInternal($length, $deviation, false, ...$formatOptions);
         return ucfirst(implode(' ', $result));
     }
 
@@ -63,7 +63,7 @@ class PredictableTextGenerator
     public function words(string $seed, int $length, ?float $deviation): array
     {
         $this->initializeDeterministicCoincidence($seed);
-        $result = $this->wordsInternal($length, $deviation);
+        $result = $this->wordsInternal($length, $deviation, true);
         return $result;
     }
 
@@ -76,11 +76,11 @@ class PredictableTextGenerator
     /**
      * @return string[]
      */
-    protected function sentencesInternal(int $length, ?float $deviation, FormatOption ...$formatOptions): array
+    protected function sentencesInternal(int $length, ?float $deviation, bool $countWords = false, FormatOption ...$formatOptions): array
     {
         if ($deviation && $deviation > 0) {
             $maxDist = (int) floor($length * $deviation);
-            $actualLength = $length + mt_rand(-1 * $maxDist, $maxDist);
+            $actualLength = $length - mt_rand(0, $maxDist);
         } else {
             $actualLength = $length;
         }
@@ -88,11 +88,17 @@ class PredictableTextGenerator
         $chars = 0;
         $sentences = [];
 
-        while ($chars <= $actualLength) {
-            $words = $this->wordsInternal(60, $deviation, ...$formatOptions);
+        while (true) {
+            $words = $this->wordsInternal(70, $deviation, $countWords, ...$formatOptions);
             $sentence = ucfirst(implode(' ', $words)) . '.';
-            $sentences[] = $sentence;
-            $chars += strlen($sentence);
+            $sentenceLength = 1 + strlen($sentence);
+            if ($sentenceLength + $chars < $actualLength)
+            {
+                $chars += $sentenceLength;
+                $sentences[] = $sentence;
+            } else {
+                break;
+            }
         }
 
         return $sentences;
@@ -101,34 +107,52 @@ class PredictableTextGenerator
     /**
      * @return array<int,string>
      */
-    protected function wordsInternal(int $length, ?float $deviation, FormatOption ...$formatOptions): array
+    protected function wordsInternal(int $length, ?float $deviation, bool $countWords = false, FormatOption ...$formatOptions): array
     {
 
         if ($deviation && $deviation > 0) {
             $maxDist = (int) floor($length * $deviation);
-            $actualLength = $length + mt_rand(-1 * $maxDist, $maxDist);
+            $actualLength = $length - mt_rand(0, $maxDist);
         } else {
             $actualLength = $length;
         }
-// \Neos\Flow\var_dump([$length, $deviation, $actualLength]);
-        $chars = 0;
+
+        $currentLength = 0;
         $words = [];
 
         /** @phpstan-ignore-next-line */
         $openerKey = mt_rand(array_key_first($this->opener), array_key_last($this->opener));
         $words[] = ucfirst($this->opener[$openerKey]);
-        $chars += strlen($this->opener[$openerKey]);
 
-        while ($chars <= $actualLength) {
+        if ($countWords) {
+            $currentLength = 1;
+        } else {
+            $currentLength += 1 + strlen($this->opener[$openerKey]);
+        }
+
+        while (true) {
             /** @phpstan-ignore-next-line */
             $wordKey = mt_rand(array_key_first($this->words), array_key_last($this->words));
             $uppercase = mt_rand(0, 4);
+
             if ($uppercase === 0) {
-                $words[] = ucfirst($this->words[$wordKey]);
+                $nextWord = ucfirst($this->words[$wordKey]);
             } else {
-                $words[] = $this->words[$wordKey];
+                $nextWord = $this->words[$wordKey];
             }
-            $chars += strlen($this->words[$wordKey]);
+
+            if ($countWords) {
+                $nextLength = 1;
+            } else {
+                $nextLength = 1 + strlen($this->words[$wordKey]);
+            }
+
+            if ($currentLength + $nextLength <= $actualLength) {
+                $words[] = $nextWord;
+                $currentLength += $nextLength;
+            } else {
+                break;
+            }
         }
 
         if ($formatOptions) {

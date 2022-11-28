@@ -19,8 +19,8 @@ class PredictableTextGeneratorTest extends TestCase
     {
         $generator = $this->getGenerator();
         $this->assertSame(
-            ['Dolor', 'eget', 'est', 'eget', 'Facilisis', 'fames', 'faucibus', 'himenaeos', 'Etiam', 'felis', 'Fusce', 'Hac'],
-            $generator->words('nudelsuppe', 60, 20)
+            ['Dolor', 'eget', 'est', 'eget', 'Facilisis', 'fames', 'faucibus', 'himenaeos', 'Etiam', 'felis', 'Fusce', 'Hac',  'facilisis', 'fames', 'hendrerit'],
+            $generator->words('nudelsuppe', 16, .2)
         );
     }
 
@@ -72,4 +72,59 @@ class PredictableTextGeneratorTest extends TestCase
         return $generator;
     }
 
+
+    /**
+     * @test
+     */
+    public function wordListsHasExactNumberOfItemsWhenNoDeviationIsGiven(): void
+    {
+        $generator = $this->getGenerator();
+        $this->assertSame(
+            20,
+            count($generator->words('nudelsuppe', 20, 0))
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function wordListsHasMaximalGivenNumberOfItemsWhenDeviationIsGiven(): void
+    {
+        $generator = $this->getGenerator();
+        for($i = 0; $i < 1000; $i++) {
+            $words = $generator->words(random_bytes(20), 20, .5);
+            $this->assertTrue(
+                count($words) <= 20
+            );
+        }
+
+    }
+
+    /**
+     * @test
+     */
+    public function sentenceHasMaximalGivenNumberOfCharacters(): void
+    {
+        $generator = $this->getGenerator();
+        for($i = 0; $i < 1000; $i++) {
+            $sentence = $generator->sentence(random_bytes(20), 70, .5);
+            $this->assertTrue(
+                strlen($sentence) <= 70
+            );
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function paragraphHasMaximalGivenNumberOfCharacters(): void
+    {
+        $generator = $this->getGenerator();
+        for($i = 0; $i < 1000; $i++) {
+            $paragraph = $generator->paragraph(random_bytes(20), 1000, .5);
+            $this->assertTrue(
+                strlen($paragraph) <= 1000
+            );
+        }
+    }
 }
