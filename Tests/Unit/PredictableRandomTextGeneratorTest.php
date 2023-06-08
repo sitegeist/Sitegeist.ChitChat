@@ -73,6 +73,20 @@ class PredictableRandomTextGeneratorTest extends TestCase
         $this->assertNotSame($text1, $text3);
     }
 
+    public function testThatTextThatAreGeneratedMatchTheRequirements (): void
+    {
+        $generator = new PredictableRandomTextGenerator(
+            $this->dictionary,
+            crc32('nudelsuppe')
+        );
+
+        for($i = 1; $i < 200; $i ++) {
+            $line = $generator->generateText(500, 1500);
+            $this->assertGreaterThanOrEqual(500, strlen($line));
+            $this->assertLessThanOrEqual(1500, strlen($line));
+        }
+    }
+
     public function testThatTextsThatAreGeneratedMatchTheRequirements (): void
     {
         $generator = new PredictableRandomTextGenerator(
@@ -126,6 +140,37 @@ class PredictableRandomTextGeneratorTest extends TestCase
         $this->assertNotSame($text1, $text2);
         $this->assertNotSame($text1, $text3);
     }
+
+    public function testThatFormattingsAreApplies (): void
+    {
+        $generator = new PredictableRandomTextGenerator(
+            $this->dictionary,
+            crc32('nudelsuppe')
+        );
+
+        $origin = 'Lorem et Himenaeos cras Ridiculus nostra Cras congue Lectus Donec Risus. Adipiscing Dictum viverra commodo Mollis venenatis Phasellus Nam Nunc. Dolor lacinia hac Velit porttitor risus ad Ante ligula habitant.';
+
+        $text = $generator->applyFormatting($origin, true, false, false);
+        $this->assertStringContainsString('<strong>', $text);
+        $this->assertStringNotContainsString('<a href="#">', $text);
+        $this->assertStringNotContainsString('<i>', $text);
+
+        $text = $generator->applyFormatting($origin, false, true, false);
+        $this->assertStringNotContainsString('<strong>', $text);
+        $this->assertStringNotContainsString('<a href="#">', $text);
+        $this->assertStringContainsString('<i>', $text);
+
+        $text = $generator->applyFormatting($origin, false, false, true);
+        $this->assertStringNotContainsString('<strong>', $text);
+        $this->assertStringContainsString('<a href="#">', $text);
+        $this->assertStringNotContainsString('<i>', $text);
+
+        $text = $generator->applyFormatting($origin, true, true, true);
+        $this->assertStringContainsString('<strong>', $text);
+        $this->assertStringContainsString('<a href="#">', $text);
+        $this->assertStringContainsString('<i>', $text);
+    }
+
 
     public function testThatSameSeedsYieldIdenticalFormatting (): void
     {

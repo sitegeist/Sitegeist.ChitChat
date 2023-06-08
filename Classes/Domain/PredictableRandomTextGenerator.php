@@ -26,18 +26,18 @@ class PredictableRandomTextGenerator
             return $text;
         }
 
-        $formatedText = preg_replace_callback(
+        $formattedText = preg_replace_callback(
             '/[^\\s\\.]+/u',
             fn(array $matches) => match ($this->randomNumber(0, 20)) {
-                0 => '<a href="#">' . $matches[0] . '</a>',
-                1 => '<strong>' . $matches[0] . '</strong>',
-                2 => '<i>' . $matches[0] . '</i>',
+                0 => $link ? '<a href="#">' . $matches[0] . '</a>' : $matches[0],
+                1 => $strong ? '<strong>' . $matches[0] . '</strong>' : $matches[0],
+                2 => $italic ? '<i>' . $matches[0] . '</i>' : $matches[0],
                 default => $matches[0]
             },
             $text
         );
 
-        return $formatedText ?? $text;
+        return $formattedText ?? $text;
     }
 
     public function generateText(int $minLength, int $maxLength): string
