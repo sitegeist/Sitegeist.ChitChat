@@ -75,9 +75,12 @@ prototype(Vendor.Site:ChitChat) < prototype(Neos.Fusion:Component) {
 The prototypes have the following properties, all are optional:
 
 - `seed` (string|null) the source of randomness in addition to the fusion path
-- `minLength` (int) the minimal length the text should have
-- `maxLength` (int) the maximal length the text should have
-
+- `minLength` (int|50) the minimal length the text should have
+- `maxLength` (int|120) the maximal length the text should have
+- `link` (bool|false) add links to some items (<a hraf="#">...</s>)
+- `strong` (bool|false) make some items bold (<strong>...</strong>)
+- `italic` (bool|false) make some items italic (<i>...</i>)
+  `
 ### List Fusion Prototypes
  
 - `Sitegeist.ChitChat:UL`:  (string) Multiple sentences as unordered list.
@@ -86,18 +89,25 @@ The prototypes have the following properties, all are optional:
 The prototypes have the following properties, all are optional:
 
 - `length` (int|5) the number of items
-- `itemMinLength` (int) the minimal length a list item should have
-- `itemMaxLength` (int) the maximal length a list item should have
+- `minLength` (int|50) the minimal length the text should have
+- `maxLength` (int|120) the maximal length the text should have
+- `link` (bool|true) add links to some items (<a hraf="#">...</s>)
+- `strong` (bool|true) make some items bold (<strong>...</strong>)
+- `italic` (bool|true) make some items italic (<i>...</i>)
 - 
 ### Base Prototypes 
 
-- `Sitegeist.ChitChat:Text`:  (string) textblock containing multiple sentences
+- `Sitegeist.ChitChat:Text`:  (string) long textblock containing multiple sentences
+- `Sitegeist.ChitChat:Line`:  (string) short textblock without 
 
 Properties:
 
 - `seed` (string|null) the source of randomness in addition to the fusion path
-- `minLength` (int) the minimal length the text should have
-- `maxLength` (int) the maximal length the text should have
+- `minLength` (int|500 bzw. 50) the minimal length the text should have
+- `maxLength` (int|1000 bzw 150) the maximal length the text should have
+- `link` (bool|false) add links to some items (<a hraf="#">...</s>)
+- `strong` (bool|false) make some items bold (<strong>...</strong>)
+- `italic` (bool|false) make some items italic (<i>...</i>)
 
 ## Contribution
 

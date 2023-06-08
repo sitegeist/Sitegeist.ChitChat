@@ -27,9 +27,20 @@ class LineImplementation extends AbstractFusionObject
         $minLength = $this->fusionValue('minLength');
         $maxLength = $this->fusionValue('maxLength');
 
-        return $generator->generateLine(
+        $line = $generator->generateLine(
             is_int($minLength) ? $minLength : 100,
             is_int($maxLength) ? $maxLength : 500
+        );
+
+        $links = $this->fusionValue('links');
+        $strong = $this->fusionValue('strong');
+        $italic = $this->fusionValue('italic');
+
+        return $generator->applyFormatting(
+            $line,
+            is_bool($links) ? $links : false,
+            is_bool($strong) ? $strong : false,
+            is_bool($italic) ? $italic : false,
         );
     }
 }

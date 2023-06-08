@@ -20,6 +20,26 @@ class PredictableRandomTextGenerator
         return $result;
     }
 
+    public function applyFormatting(string $text, bool $strong = false, bool $italic = false, bool $link = false): string
+    {
+        if (!$strong && !$italic && !$link) {
+            return $text;
+        }
+
+        $formatedText = preg_replace_callback(
+            '/[^\\s\\.]+/u',
+            fn(array $matches) => match ($this->randomNumber(0, 20)) {
+                0 => '<a href="#">' . $matches[0] . '</a>',
+                1 => '<strong>' . $matches[0] . '</strong>',
+                2 => '<i>' . $matches[0] . '</i>',
+                default => $matches[0]
+            },
+            $text
+        );
+
+        return $formatedText ?? $text;
+    }
+
     public function generateText(int $minLength, int $maxLength): string
     {
         $sentences = $this->generateSentences($minLength, $maxLength);
@@ -28,8 +48,8 @@ class PredictableRandomTextGenerator
 
     public function generateLine(int $minLength, int $maxLength): string
     {
-        $sentences = $this->generateWords($minLength, $maxLength);
-        return implode(' ', $sentences);
+        $words = $this->generateWords($minLength, $maxLength);
+        return implode(' ', $words);
     }
 
     /**
@@ -57,7 +77,7 @@ class PredictableRandomTextGenerator
             $nextSentence = implode(' ', $words) . '.';
             $nextLength = $currentLength + 1 + strlen($nextSentence);
 
-            if ($nextLength >= $targetTotalLength || $nextLength >= $maxTotalLength) {
+            if ($nextLength > $maxTotalLength || $currentLength > $targetTotalLength) {
                 break;
             } else {
                 $sentences[] = $nextSentence;
@@ -77,12 +97,12 @@ class PredictableRandomTextGenerator
 
         $words = [];
 
-        $opener = $this->dictionaryProvider->provideOpener($this->randomNumber(1, $this->dictionaryProvider->provideOpenerNumber()));
+        $opener = $this->dictionaryProvider->provideOpener($this->randomNumber(0, $this->dictionaryProvider->provideMaxOpenerIndex()));
         $words[] = ucfirst($opener);
         $currentLength = strlen($opener);
 
         while (true) {
-            $nextWord = $this->dictionaryProvider->provideWord($this->randomNumber(1, $this->dictionaryProvider->provideWordNumber()));
+            $nextWord = $this->dictionaryProvider->provideWord($this->randomNumber(0, $this->dictionaryProvider->provideMaxWordIndex()));
             $nextLength = $currentLength + 1 + strlen($nextWord);
             $nextUppercase = $this->randomNumber(0, 2);
 
@@ -90,7 +110,7 @@ class PredictableRandomTextGenerator
                 $nextWord = ucfirst($nextWord);
             }
 
-            if ($nextLength >= $targetLength || $nextLength >= $maxLength) {
+            if ($nextLength > $maxLength || $currentLength > $targetLength) {
                 break;
             } else {
                 $words[] = $nextWord;

@@ -1,15 +1,25 @@
 prototype(Sitegeist.ChitChat:Text) {
   @class = "Sitegeist\\ChitChat\\FusionObjects\\TextImplementation"
   seed = null
+
   minLength = 500
   maxLength = 1000
+
+  links = false
+  strong = false
+  italic = false
 }
 
 prototype(Sitegeist.ChitChat:Line) {
   @class = "Sitegeist\\ChitChat\\FusionObjects\\LineImplementation"
   seed = null
+
   minLength = 50
   maxLength = 150
+
+  links = false
+  strong = false
+  italic = false
 }
 
 prototype(Sitegeist.ChitChat:H1) < prototype(Neos.Fusion:Component) {
@@ -52,34 +62,48 @@ prototype(Sitegeist.ChitChat:P) < prototype(Neos.Fusion:Component) {
   minLength = 100
   maxLength = 500
 
+  links = true
+  strong = true
+  italic = true
+
   renderer = afx`
     <p><Sitegeist.ChitChat:Text {...props} /></p>
   `
 }
 
 prototype(Sitegeist.ChitChat:UL) < prototype(Neos.Fusion:Component) {
+
   length = 5
-  itemMinLength = 50
-  itemMaxLength = 50
+  minLength = 50
+  maxLength = 120
+
+  links = true
+  strong = true
+  italic = true
 
   renderer = afx`
     <ul>
       <Neos.Fusion:Loop items={Array.range(1, props.length)} itemName="index">
-        <li><Sitegeist.ChitChat:Line seed={index} minLength={props.itemMinLength} maxLength={props.itemMaxLength} /></li>
+        <li><Sitegeist.ChitChat:Line seed={index} {...props} /></li>
       </Neos.Fusion:Loop>
     </ul>
   `
 }
 
 prototype(Sitegeist.ChitChat:OL) < prototype(Neos.Fusion:Component) {
+
   length = 5
-  itemMinLength = 50
-  itemMaxLength = 50
+  minLength = 50
+  maxLength = 120
+
+  links = true
+  strong = true
+  italic = true
 
   renderer = afx`
     <ol>
       <Neos.Fusion:Loop items={Array.range(1, props.length)} itemName="index">
-        <li><Sitegeist.ChitChat:Line seed={index} minLength={props.itemMinLength} maxLength={props.itemMaxLength} /></li>
+        <li><Sitegeist.ChitChat:Line seed={index} {...props}  /></li>
       </Neos.Fusion:Loop>
     </ol>
   `

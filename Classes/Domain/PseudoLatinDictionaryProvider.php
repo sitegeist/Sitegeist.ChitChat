@@ -12,17 +12,26 @@ class PseudoLatinDictionaryProvider implements DictionaryProviderInterface
     /**
      * @var string[]
      */
-    protected array $opener = [
-        'lorem', 'ipsum', 'dolor', 'sit',
-        'amet', 'consectetur', 'adipiscing', 'elit'
-    ];
+    protected readonly array $opener;
 
-    protected int $openerNumber;
+    protected readonly int $openerNumber;
 
     /**
      * @var string[]
      */
-    protected array $words = [
+    protected readonly array $words;
+
+    protected readonly int $wordNumber;
+
+    public function __construct()
+    {
+        $this->opener = [
+            'lorem', 'ipsum', 'dolor', 'sit',
+            'amet', 'consectetur', 'adipiscing', 'elit'
+        ];
+        $this->openerNumber = count($this->opener) - 1;
+
+        $this->words = [
             'a', 'ac', 'accumsan', 'ad',
             'aenean', 'aliquam', 'aliquet', 'ante',
             'aptent', 'arcu', 'at', 'auctor',
@@ -69,31 +78,25 @@ class PseudoLatinDictionaryProvider implements DictionaryProviderInterface
             'vivamus', 'viverra', 'volutpat', 'vulputate'
         ];
 
-
-    protected int $wordNumber;
-
-    public function __construct()
-    {
-        $this->openerNumber = count($this->opener);
-        $this->wordNumber = count($this->words);
+        $this->wordNumber = count($this->words) - 1;
     }
 
-    public function provideOpener(int $number): string
+    public function provideOpener(int $index): string
     {
-        return $this->opener[$number - 1];
+        return $this->opener[$index];
     }
 
-    public function provideOpenerNumber(): int
+    public function provideMaxOpenerIndex(): int
     {
         return $this->openerNumber;
     }
 
-    public function provideWord(int $number): string
+    public function provideWord(int $index): string
     {
-        return $this->words[$number - 1];
+        return $this->words[$index];
     }
 
-    public function provideWordNumber(): int
+    public function provideMaxWordIndex(): int
     {
         return $this->wordNumber;
     }
