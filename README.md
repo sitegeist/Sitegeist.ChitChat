@@ -12,11 +12,11 @@ same lorem ipsum texts over and over again!**
 
 ```neosfusion
 dummytext = afx`
-  <Sitegeist.ChitChat:H2 italic />
+  <Sitegeist.ChitChat:H2 />
   <Sitegeist.ChitChat:H3 />
-  <Sitegeist.ChitChat:P links bold />
-  <Sitegeist.ChitChat:P length={500} />
-  <Sitegeist.ChitChat:OL links />
+  <Sitegeist.ChitChat:P />
+  <Sitegeist.ChitChat:P />
+  <Sitegeist.ChitChat:OL />
 `
 ```
 
@@ -44,15 +44,15 @@ prototype(Vendor.Site:ChitChat) < prototype(Neos.Fusion:Component) {
     @styleguide {
         title = "ChitChat"
         props.text = afx`
-            <Sitegeist.ChitChat:H1 italic />
-            <Sitegeist.ChitChat:H2 length={120} />
-            <Sitegeist.ChitChat:P links italic bold />
-            <Sitegeist.ChitChat:P links italic bold />
+            <Sitegeist.ChitChat:H1 />
+            <Sitegeist.ChitChat:H2 />
+            <Sitegeist.ChitChat:P />
+            <Sitegeist.ChitChat:P />
             <Sitegeist.ChitChat:P />
             <Sitegeist.ChitChat:H3 />
-            <Sitegeist.ChitChat:UL links />
+            <Sitegeist.ChitChat:UL />
             <Sitegeist.ChitChat:H3 />
-            <Sitegeist.ChitChat:OL links />
+            <Sitegeist.ChitChat:OL />
         `
     }
 
@@ -64,40 +64,41 @@ prototype(Vendor.Site:ChitChat) < prototype(Neos.Fusion:Component) {
 }
 ```
 
-### Fusion Prototypes
+### Text Fusion Prototypes
 
 - `Sitegeist.ChitChat:H1`:  (string) A sentence in a h1-tag
 - `Sitegeist.ChitChat:H2`:  (string) A sentence in a h2-tag
 - `Sitegeist.ChitChat:H3`:  (string) A sentence in a h3-tag
 - `Sitegeist.ChitChat:H4`:  (string) A sentence in a h4-tag
 - `Sitegeist.ChitChat:P`:  (string) A sentence in a p-tag
+
+The prototypes have the following properties, all are optional:
+
+- `seed` (string|null) the source of randomness in addition to the fusion path
+- `minLength` (int) the minimal length the text should have
+- `maxLength` (int) the maximal length the text should have
+
+### List Fusion Prototypes
+ 
 - `Sitegeist.ChitChat:UL`:  (string) Multiple sentences as unordered list.
 - `Sitegeist.ChitChat:OL`:  (string) Multiple sentences as ordered list.
 
 The prototypes have the following properties, all are optional:
 
-- `seed` (string|null) the source of randomness in addition to the fusion path
-- `length` (int) the length the text should approximately have
-- `deviation` (int) the deviation on length to be used between consecutive items
-
-- `link` (bool) add links to some items (`<a hraf="#">...</s>`)
-- `bold` (bool) make some items bold (`<strong>...</strong>`)
-- `italic` (bool) make some items italic (`<i>...</i>`)
-
+- `length` (int|5) the number of items
+- `itemMinLength` (int) the minimal length a list item should have
+- `itemMaxLength` (int) the maximal length a list item should have
+- 
 ### Base Prototypes 
 
-The following Prototypes generate texts of one or multiple sentences. 
-- `Sitegeist.ChitChat:Paragraph`:  (string) textblock containing multiple sentences
-- `Sitegeist.ChitChat:Sentence `:  (string) sentence containing multiple words
+- `Sitegeist.ChitChat:Text`:  (string) textblock containing multiple sentences
 
-The following prototypes generate arrays of strings and are handy to create  
-lists and menu dummys.
-- `Sitegeist.ChitChat:Sentences`:  (array) multiple sentences
-- `Sitegeist.ChitChat:Words`:  (array) multiple words
+Properties:
 
-The common properties are supported here aswell.
+- `seed` (string|null) the source of randomness in addition to the fusion path
+- `minLength` (int) the minimal length the text should have
+- `maxLength` (int) the maximal length the text should have
 
- 
 ## Contribution
 
 We will gladly accept contributions. Please send us pull requests.

@@ -1,102 +1,136 @@
-prototype(Sitegeist.ChitChat:Paragraph) {
-  @class = "Sitegeist\\ChitChat\\FusionObjects\\ParagraphImplementation"
-
-  length = 1000
-  deviation = 0.5
-}
-
-prototype(Sitegeist.ChitChat:Sentences) {
-  @class = "Sitegeist\\ChitChat\\FusionObjects\\SentencesImplementation"
-
-  length = 1000
-  deviation = 0.5
-}
-
-prototype(Sitegeist.ChitChat:Sentence) {
-  @class = "Sitegeist\\ChitChat\\FusionObjects\\SentenceImplementation"
-
-  length = 60
-  deviation = 0.5
-}
-
-prototype(Sitegeist.ChitChat:Words) {
-  @class = "Sitegeist\\ChitChat\\FusionObjects\\WordsImplementation"
-
-  length = 60
-  deviation = 0.5
+prototype(Sitegeist.ChitChat:Text) {
+  @class = "Sitegeist\\ChitChat\\FusionObjects\\TextImplementation"
+  seed = null
+  minLength = 500
+  maxLength = 1000
 }
 
 prototype(Sitegeist.ChitChat:H1) < prototype(Neos.Fusion:Component) {
-  renderer = Neos.Fusion:Tag {
-    tagName = 'h1'
-    content = Sitegeist.ChitChat:Sentence {
-      @apply.props = ${props}
-    }
-  }
+  minLength = 50
+  maxLength = 100
+
+  renderer = afx`
+    <h1><Sitegeist.ChitChat:Text {...props} /></h1>
+  `
 }
 
 prototype(Sitegeist.ChitChat:H2) < prototype(Neos.Fusion:Component) {
-  renderer = Neos.Fusion:Tag {
-    tagName = 'h2'
-    content = Sitegeist.ChitChat:Sentence {
-      @apply.props = ${props}
-    }
-  }
+  minLength = 50
+  maxLength = 100
+
+  renderer = afx`
+    <h2><Sitegeist.ChitChat:Text {...props} /></h2>
+  `
 }
 
 prototype(Sitegeist.ChitChat:H3) < prototype(Neos.Fusion:Component) {
-  renderer = Neos.Fusion:Tag {
-    tagName = 'h3'
-    content = Sitegeist.ChitChat:Sentence {
-      @apply.props = ${props}
-    }
-  }
+  minLength = 50
+  maxLength = 100
+
+  renderer = afx`
+    <h3><Sitegeist.ChitChat:Text {...props} /></h3>
+  `
 }
 
 prototype(Sitegeist.ChitChat:H4) < prototype(Neos.Fusion:Component) {
-  renderer = Neos.Fusion:Tag {
-    tagName = 'h4'
-    content = Sitegeist.ChitChat:Sentence {
-      @apply.props = ${props}
-    }
-  }
+  minLength = 50
+  maxLength = 100
+
+  renderer = afx`
+    <h4><Sitegeist.ChitChat:Text {...props} /></h4>
+  `
 }
 
 prototype(Sitegeist.ChitChat:P) < prototype(Neos.Fusion:Component) {
-  renderer = Neos.Fusion:Tag {
-    tagName = 'p'
-    content = Sitegeist.ChitChat:Paragraph {
-      @apply.props = ${props}
-    }
-  }
+  minLength = 100
+  maxLength = 500
+
+  renderer = afx`
+    <p><Sitegeist.ChitChat:Text {...props} /></p>
+  `
 }
 
 prototype(Sitegeist.ChitChat:UL) < prototype(Neos.Fusion:Component) {
-  renderer = Neos.Fusion:Tag {
-    tagName = 'ul'
-    content = Neos.Fusion:Loop {
-      items = Sitegeist.ChitChat:Sentences {
-        @apply.props = ${props}
-      }
-      itemRenderer = Neos.Fusion:Tag {
-        tagName = 'li'
-        content = ${item}
-      }
-    }
-  }
+  length = 5
+  itemMinLength = 50
+  itemMaxLength = 50
+
+  renderer = afx`
+    <ul>
+      <Neos.Fusion:Loop items={Array.range(1, props.length)} itemName="index">
+        <li><Sitegeist.ChitChat:Text seed={index} minLength={props.itemMinLength} maxLength={props.itemMaxLength} /></li>
+      </Neos.Fusion:Loop>
+    </ul>
+  `
 }
 
 prototype(Sitegeist.ChitChat:OL) < prototype(Neos.Fusion:Component) {
-  renderer = Neos.Fusion:Tag {
-    tagName = 'ol'
-    content = Neos.Fusion:Loop {
-      items = Sitegeist.ChitChat:Sentences {
-        @apply.props = ${props}
-      }
-      itemRenderer = Neos.Fusion:Tag {
-        tagName = 'li'
-        content = ${item}
-      }
-    }
-  }
+  length = 5
+  itemMinLength = 50
+  itemMaxLength = 50
+
+  renderer = afx`
+    <ol>
+      <Neos.Fusion:Loop items={Array.range(1, props.length)} itemName="index">
+        <li><Sitegeist.ChitChat:Text seed={index} minLength={props.itemMinLength} maxLength={props.itemMaxLength} /></li>
+      </Neos.Fusion:Loop>
+    </ol>
+  `
 }
+
+
+
+prototype(Sitegeist.ChitChat:Test1) < prototype(Neos.Fusion:Component) {
+  @styleguide {
+    title = "ChitChat Test 1"
+    props.text = afx`
+      <Sitegeist.ChitChat:H1 />
+      <Sitegeist.ChitChat:H2 />
+      <Sitegeist.ChitChat:H3 />
+      <Sitegeist.ChitChat:P />
+      <Sitegeist.ChitChat:P />
+      <Sitegeist.ChitChat:UL />
+      <Sitegeist.ChitChat:OL />
+      <Sitegeist.ChitChat:P />
+    `
+  }
+
+  renderer = afx`
+    <div class="prose">{props.text}</div>
+  `
+}
+
+prototype(Sitegeist.ChitChat:Test2) < prototype(Neos.Fusion:Component) {
+  @styleguide {
+    title = "ChitChat Test 2"
+    props.text = afx`
+      <Sitegeist.ChitChat:H1 />
+      <Sitegeist.ChitChat:H2 />
+      <Sitegeist.ChitChat:H3 />
+      <Sitegeist.ChitChat:P />
+      <Sitegeist.ChitChat:P />
+      <Sitegeist.ChitChat:UL />
+      <Sitegeist.ChitChat:OL />
+      <Sitegeist.ChitChat:P />
+    `
+  }
+
+  renderer = afx`
+    <div class="prose">{props.text}</div>
+  `
+}
+
+prototype(Sitegeist.ChitChat:List) < prototype(Neos.Fusion:Component) {
+  @styleguide {
+    title = "ChitChat List"
+    props.text = afx`
+      <Sitegeist.ChitChat:UL />
+      <Sitegeist.ChitChat:OL />
+    `
+  }
+
+  renderer = afx`
+    <div class="prose">{props.text}</div>
+  `
+}
+
