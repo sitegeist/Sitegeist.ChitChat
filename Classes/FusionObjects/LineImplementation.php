@@ -4,18 +4,23 @@ declare(strict_types=1);
 
 namespace Sitegeist\ChitChat\FusionObjects;
 
+use Neos\Flow\Annotations as Flow;
 use Neos\Fusion\FusionObjects\AbstractFusionObject;
+use Sitegeist\ChitChat\Domain\DictionaryProviderInterface;
 use Sitegeist\ChitChat\Domain\PredictableRandomTextGenerator;
 use Sitegeist\ChitChat\Domain\PseudoLatinDictionaryProvider;
 
 class LineImplementation extends AbstractFusionObject
 {
+    #[Flow\Inject(lazy:false)]
+    protected DictionaryProviderInterface $dictionaryProvider;
+
     public function evaluate(): string
     {
         $seed = crc32($this->path . ($this->fusionValue('seed') ?: ''));
 
         $generator = new PredictableRandomTextGenerator(
-            new PseudoLatinDictionaryProvider(),
+            $this->dictionaryProvider,
             $seed
         );
 

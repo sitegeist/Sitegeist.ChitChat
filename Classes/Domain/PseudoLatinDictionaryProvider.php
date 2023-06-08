@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Sitegeist\ChitChat\Domain;
 
+use Neos\Flow\Annotations as Flow;
+
+#[Flow\Scope('singleton')]
 class PseudoLatinDictionaryProvider implements DictionaryProviderInterface
 {
     /**
