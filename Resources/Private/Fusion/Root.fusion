@@ -5,12 +5,19 @@ prototype(Sitegeist.ChitChat:Text) {
   maxLength = 1000
 }
 
+prototype(Sitegeist.ChitChat:Line) {
+  @class = "Sitegeist\\ChitChat\\FusionObjects\\LineImplementation"
+  seed = null
+  minLength = 50
+  maxLength = 150
+}
+
 prototype(Sitegeist.ChitChat:H1) < prototype(Neos.Fusion:Component) {
   minLength = 50
   maxLength = 100
 
   renderer = afx`
-    <h1><Sitegeist.ChitChat:Text {...props} /></h1>
+    <h1><Sitegeist.ChitChat:Line {...props} /></h1>
   `
 }
 
@@ -19,7 +26,7 @@ prototype(Sitegeist.ChitChat:H2) < prototype(Neos.Fusion:Component) {
   maxLength = 100
 
   renderer = afx`
-    <h2><Sitegeist.ChitChat:Text {...props} /></h2>
+    <h2><Sitegeist.ChitChat:Line {...props} /></h2>
   `
 }
 
@@ -28,7 +35,7 @@ prototype(Sitegeist.ChitChat:H3) < prototype(Neos.Fusion:Component) {
   maxLength = 100
 
   renderer = afx`
-    <h3><Sitegeist.ChitChat:Text {...props} /></h3>
+    <h3><Sitegeist.ChitChat:Line {...props} /></h3>
   `
 }
 
@@ -37,7 +44,7 @@ prototype(Sitegeist.ChitChat:H4) < prototype(Neos.Fusion:Component) {
   maxLength = 100
 
   renderer = afx`
-    <h4><Sitegeist.ChitChat:Text {...props} /></h4>
+    <h4><Sitegeist.ChitChat:Line {...props} /></h4>
   `
 }
 
@@ -58,7 +65,7 @@ prototype(Sitegeist.ChitChat:UL) < prototype(Neos.Fusion:Component) {
   renderer = afx`
     <ul>
       <Neos.Fusion:Loop items={Array.range(1, props.length)} itemName="index">
-        <li><Sitegeist.ChitChat:Text seed={index} minLength={props.itemMinLength} maxLength={props.itemMaxLength} /></li>
+        <li><Sitegeist.ChitChat:Line seed={index} minLength={props.itemMinLength} maxLength={props.itemMaxLength} /></li>
       </Neos.Fusion:Loop>
     </ul>
   `
@@ -72,7 +79,7 @@ prototype(Sitegeist.ChitChat:OL) < prototype(Neos.Fusion:Component) {
   renderer = afx`
     <ol>
       <Neos.Fusion:Loop items={Array.range(1, props.length)} itemName="index">
-        <li><Sitegeist.ChitChat:Text seed={index} minLength={props.itemMinLength} maxLength={props.itemMaxLength} /></li>
+        <li><Sitegeist.ChitChat:Line seed={index} minLength={props.itemMinLength} maxLength={props.itemMaxLength} /></li>
       </Neos.Fusion:Loop>
     </ol>
   `

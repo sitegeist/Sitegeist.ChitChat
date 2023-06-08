@@ -26,6 +26,12 @@ class PredictableRandomTextGenerator
         return implode(' ', $sentences);
     }
 
+    public function generateLine(int $minLength, int $maxLength): string
+    {
+        $sentences = $this->generateWords($minLength, $maxLength);
+        return implode(' ', $sentences);
+    }
+
     /**
      * @return array<int,string>
      */
