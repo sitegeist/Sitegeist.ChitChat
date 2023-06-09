@@ -1,6 +1,7 @@
 prototype(Sitegeist.ChitChat:Text) {
   @class = "Sitegeist\\ChitChat\\FusionObjects\\TextImplementation"
   seed = null
+  dictionary = 'default'
 
   length = 500
   variance = 0.5
@@ -13,6 +14,7 @@ prototype(Sitegeist.ChitChat:Text) {
 prototype(Sitegeist.ChitChat:Line) {
   @class = "Sitegeist\\ChitChat\\FusionObjects\\LineImplementation"
   seed = null
+  dictionary = 'default'
 
   length = 100
   variance = 0.5

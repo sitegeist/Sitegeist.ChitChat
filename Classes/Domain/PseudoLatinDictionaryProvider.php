@@ -100,4 +100,9 @@ class PseudoLatinDictionaryProvider implements DictionaryProviderInterface
     {
         return $this->wordNumber;
     }
+
+    public function provideSentenceSeparator(): string
+    {
+        return '.';
+    }
 }

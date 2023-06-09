@@ -14,7 +14,7 @@ class TextImplementation extends BaseFusionObject
         $seed = crc32($this->path . ($this->fusionValue('seed') ?: ''));
 
         $generator = new PredictableRandomTextGenerator(
-            $this->dictionaryProvider,
+            $this->resolveDictionaryProvider(),
             $seed
         );
 
