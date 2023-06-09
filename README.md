@@ -7,19 +7,6 @@ tend to overshadow the actual component and often do not provide enough diversio
 ChitChat generates pseudo random texts that can be used in styleguide props. The texts are generated uniquely for each
 insertion point (fusion path) using pseudo random numbers.
 
-The styleguide only specifies that a headline follows by two paragraphs and a list is needed. **No need to copy and paste the 
-same lorem ipsum texts over and over again!**
-
-```neosfusion
-dummytext = afx`
-  <Sitegeist.ChitChat:H2 />
-  <Sitegeist.ChitChat:H3 />
-  <Sitegeist.ChitChat:P />
-  <Sitegeist.ChitChat:P />
-  <Sitegeist.ChitChat:OL />
-`
-```
-
 The implementation was inspired by the js library getlorem https://github.com/lukehaas/getlorem/. 
 Also the word list we use started as a copy from getlorem.
 
@@ -39,75 +26,114 @@ We use semantic-versioning so every breaking change will increase the major-vers
 
 ## Usage
 
+The `Line` and `Text` prototypes generate a pseudo random text. 
+The text is much longer and structured as multiple sentences. 
+Both prototypes allow to enable formatting via `links`, `strong` 
+and `em`. 
+
 ```neosfusion
-prototype(Vendor.Site:ChitChat) < prototype(Neos.Fusion:Component) {
+prototype(Sitegeist.ChitChat:CardExample) < prototype(Neos.Fusion:Component) {
     @styleguide {
-        title = "ChitChat"
-        props.text = afx`
-            <Sitegeist.ChitChat:H1 />
-            <Sitegeist.ChitChat:H2 />
-            <Sitegeist.ChitChat:P />
-            <Sitegeist.ChitChat:P />
-            <Sitegeist.ChitChat:P />
-            <Sitegeist.ChitChat:H3 />
-            <Sitegeist.ChitChat:UL />
-            <Sitegeist.ChitChat:H3 />
-            <Sitegeist.ChitChat:OL />
-        `
+        title = "ChitChat CardExample"
+      
+        props {
+            # a short text without formatting
+            title = Sitegeist.ChitChat:Line
+            # a textblock with multiple sentences and some formatting
+            description = Sitegeist.ChitChat:Text {
+                length = 250
+                link = true
+                strong = true
+                em = true
+            }
+        }
     }
 
-    text = null
+    title = null
+    description = null
 
     renderer = afx`
-        <div>{props.text}</div>
+        <div>
+            <h3>{props.title}</p>
+            <p>{props.description}</p>
+        </div>
     `
 }
 ```
 
-### Text Fusion Prototypes
+For simulating longer and formatted texts chitchat brings prototypes to simulate
+Html Headings, Paragraphs and Lists. Those allow to specify the expected structure 
+of the `content` prop. Together with the afx syntax this allows to efficiently mock 
+larger texts.
+
+```neosfusion
+prototype(Sitegeist.ChitChat:TextExample) < prototype(Neos.Fusion:Component) {
+    @styleguide {
+        title = "ChitChat TextExample"
+      
+        props {
+            # a block with mutltiple headlines paragraphs and lists
+            content = afx`
+              <Sitegeist.ChitChat:H1 />
+              <Sitegeist.ChitChat:H2 />
+              <Sitegeist.ChitChat:P />
+              <Sitegeist.ChitChat:P />
+              <Sitegeist.ChitChat:P />
+              <Sitegeist.ChitChat:H3 />
+              <Sitegeist.ChitChat:UL />
+              <Sitegeist.ChitChat:H3 />
+              <Sitegeist.ChitChat:OL />
+            `
+        }
+    }
+
+    content = null
+
+    renderer = afx`
+        <div>{props.content}</div>
+    `
+}
+```
+
+### Base Prototypes
+
+The base prototypes `Text` and `Line` will create text without block formatting.   
+
+- `Sitegeist.ChitChat:Text`:  (string) long textblock containing multiple sentences
+- `Sitegeist.ChitChat:Line`:  (string) short textblock without
+
+Properties:
+
+- `seed` (string|null) the source of randomness in addition to the fusion path
+- `length` (int|100 bzw. 500) the maximal length the text should have
+- `variance` (float|0.5) the deviation in length that is allowed 
+- `link` (bool|false) add links to some items (<a href="#">...</s>)
+- `strong` (bool|false) make some items bold (<strong>...</strong>)
+- `em` (bool|false) emphasize some items (<em>...</em>)
+
+### Textblock Fusion Prototypes
+
+The textblocks extend the base prototypes with block formatting.
+Otherwise they support the same properties as `Text` and `Line`. 
 
 - `Sitegeist.ChitChat:H1`:  (string) A sentence in a h1-tag
 - `Sitegeist.ChitChat:H2`:  (string) A sentence in a h2-tag
 - `Sitegeist.ChitChat:H3`:  (string) A sentence in a h3-tag
 - `Sitegeist.ChitChat:H4`:  (string) A sentence in a h4-tag
-- `Sitegeist.ChitChat:P`:  (string) A sentence in a p-tag
+- `Sitegeist.ChitChat:P`:  (string) A sentence in a p-tag with links, strong and em
 
-The prototypes have the following properties, all are optional:
-
-- `seed` (string|null) the source of randomness in addition to the fusion path
-- `minLength` (int|50) the minimal length the text should have
-- `maxLength` (int|120) the maximal length the text should have
-- `link` (bool|false) add links to some items (<a hraf="#">...</s>)
-- `strong` (bool|false) make some items bold (<strong>...</strong>)
-- `italic` (bool|false) make some items italic (<i>...</i>)
-  `
 ### List Fusion Prototypes
- 
-- `Sitegeist.ChitChat:UL`:  (string) Multiple sentences as unordered list.
-- `Sitegeist.ChitChat:OL`:  (string) Multiple sentences as ordered list.
 
-The prototypes have the following properties, all are optional:
+The list prototypes extend the base prototypes with list formatting.
+The prototypes have the properties as the base prototypes, in addition the
+property `number` allows to specify how many items are to be generated. 
 
-- `length` (int|5) the number of items
-- `minLength` (int|50) the minimal length the text should have
-- `maxLength` (int|120) the maximal length the text should have
-- `link` (bool|true) add links to some items (<a hraf="#">...</s>)
-- `strong` (bool|true) make some items bold (<strong>...</strong>)
-- `italic` (bool|true) make some items italic (<i>...</i>)
-- 
-### Base Prototypes 
+- `Sitegeist.ChitChat:UL`:  (string) Multiple sentences as unordered list with links, strong and em
+- `Sitegeist.ChitChat:OL`:  (string) Multiple sentences as ordered list with links, strong and em
 
-- `Sitegeist.ChitChat:Text`:  (string) long textblock containing multiple sentences
-- `Sitegeist.ChitChat:Line`:  (string) short textblock without 
+Additional properties:
 
-Properties:
-
-- `seed` (string|null) the source of randomness in addition to the fusion path
-- `minLength` (int|500 bzw. 50) the minimal length the text should have
-- `maxLength` (int|1000 bzw 150) the maximal length the text should have
-- `link` (bool|false) add links to some items (<a hraf="#">...</s>)
-- `strong` (bool|false) make some items bold (<strong>...</strong>)
-- `italic` (bool|false) make some items italic (<i>...</i>)
+- `number` (int|5) the number of items to generate
 
 ## Contribution
 

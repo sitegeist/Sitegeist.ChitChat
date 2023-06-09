@@ -151,24 +151,24 @@ class PredictableRandomTextGeneratorTest extends TestCase
         $origin = 'Lorem et Himenaeos cras Ridiculus nostra Cras congue Lectus Donec Risus. Adipiscing Dictum viverra commodo Mollis venenatis Phasellus Nam Nunc. Dolor lacinia hac Velit porttitor risus ad Ante ligula habitant.';
 
         $text = $generator->applyFormatting($origin, true, false, false);
-        $this->assertStringContainsString('<strong>', $text);
-        $this->assertStringNotContainsString('<a href="#">', $text);
-        $this->assertStringNotContainsString('<i>', $text);
+        $this->assertStringContainsString('<a href="#">', $text);
+        $this->assertStringNotContainsString('<strong>', $text);
+        $this->assertStringNotContainsString('<em>', $text);
 
         $text = $generator->applyFormatting($origin, false, true, false);
-        $this->assertStringNotContainsString('<strong>', $text);
+        $this->assertStringContainsString('<strong>', $text);
         $this->assertStringNotContainsString('<a href="#">', $text);
-        $this->assertStringContainsString('<i>', $text);
+        $this->assertStringNotContainsString('<em>', $text);
 
         $text = $generator->applyFormatting($origin, false, false, true);
         $this->assertStringNotContainsString('<strong>', $text);
-        $this->assertStringContainsString('<a href="#">', $text);
-        $this->assertStringNotContainsString('<i>', $text);
+        $this->assertStringNotContainsString('<a href="#">', $text);
+        $this->assertStringContainsString('<em>', $text);
 
         $text = $generator->applyFormatting($origin, true, true, true);
         $this->assertStringContainsString('<strong>', $text);
         $this->assertStringContainsString('<a href="#">', $text);
-        $this->assertStringContainsString('<i>', $text);
+        $this->assertStringContainsString('<em>', $text);
     }
 
 

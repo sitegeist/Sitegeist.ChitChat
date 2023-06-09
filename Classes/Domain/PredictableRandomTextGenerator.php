@@ -20,9 +20,9 @@ class PredictableRandomTextGenerator
         return $result;
     }
 
-    public function applyFormatting(string $text, bool $strong = false, bool $italic = false, bool $link = false): string
+    public function applyFormatting(string $text, bool $link = false, bool $strong = false, bool $em = false): string
     {
-        if (!$strong && !$italic && !$link) {
+        if (!$strong && !$em && !$link) {
             return $text;
         }
 
@@ -31,7 +31,7 @@ class PredictableRandomTextGenerator
             fn(array $matches) => match ($this->randomNumber(0, 20)) {
                 0 => $link ? '<a href="#">' . $matches[0] . '</a>' : $matches[0],
                 1 => $strong ? '<strong>' . $matches[0] . '</strong>' : $matches[0],
-                2 => $italic ? '<i>' . $matches[0] . '</i>' : $matches[0],
+                2 => $em ? '<em>' . $matches[0] . '</em>' : $matches[0],
                 default => $matches[0]
             },
             $text
