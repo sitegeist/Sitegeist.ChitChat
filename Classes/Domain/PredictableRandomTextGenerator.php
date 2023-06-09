@@ -68,13 +68,13 @@ class PredictableRandomTextGenerator
         $targetTotalLength = $this->randomNumber($minTotalLength, $maxTotalLength);
 
         $firstWords = $this->generateWords($minSentenceLength, $maxSentenceLength);
-        $firstSentence = implode(' ', $firstWords) . '.';
+        $firstSentence = implode(' ', $firstWords) . $this->dictionaryProvider->provideSentenceSeparator();
         $currentLength = strlen($firstSentence);
         $sentences = [$firstSentence];
 
         while (true) {
             $words = $this->generateWords($minSentenceLength, $maxSentenceLength);
-            $nextSentence = implode(' ', $words) . '.';
+            $nextSentence = implode(' ', $words) . $this->dictionaryProvider->provideSentenceSeparator();
             $nextLength = $currentLength + 1 + strlen($nextSentence);
 
             if ($nextLength > $maxTotalLength || $currentLength > $targetTotalLength) {

@@ -103,6 +103,7 @@ The base prototypes `Text` and `Line` will create text without block formatting.
 
 Properties:
 
+- `dictionary` (string|`default`) the name of the dictionaries as configured in the settings
 - `seed` (string|null) the source of randomness in addition to the fusion path
 - `length` (int|100 bzw. 500) the maximal length the text should have
 - `variance` (float|0.5) the deviation in length that is allowed 
@@ -133,6 +134,28 @@ property `number` allows to specify how many items are to be generated.
 Additional properties:
 
 - `number` (int|5) the number of items to generate
+
+## Replacing the dictionary or "how to speak klingon"
+
+To implement custom dictionaries you can provide alternate implementations of the
+interface `\Sitegeist\ChitChat\Domain\DictionaryProviderInterface`. 
+ 
+The dictionaries are registered via Setting.yaml:
+
+```yaml
+Sitegeist:
+  ChitChat:
+    dictionaries:
+      klingon: 'Vendor\Example\KlingonDictionaryProvider'
+```
+
+And can later be used like this:
+
+```neosfusion
+text = Sitegeist.ChitChat:Text {
+  dictionary = 'klingon'
+} 
+```
 
 ## Contribution
 

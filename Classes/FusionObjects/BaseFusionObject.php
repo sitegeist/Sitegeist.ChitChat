@@ -5,13 +5,39 @@ declare(strict_types=1);
 namespace Sitegeist\ChitChat\FusionObjects;
 
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\ObjectManagement\ObjectManager;
 use Neos\Fusion\FusionObjects\AbstractFusionObject;
 use Sitegeist\ChitChat\Domain\DictionaryProviderInterface;
+use Sitegeist\ChitChat\Domain\PseudoLatinDictionaryProvider;
 
 abstract class BaseFusionObject extends AbstractFusionObject
 {
-    #[Flow\Inject(lazy:false)]
-    protected DictionaryProviderInterface $dictionaryProvider;
+    #[Flow\Inject]
+    protected ObjectManager $objectManager;
+
+    /**
+     * @var array<string,string>
+     */
+    #[Flow\InjectConfiguration(path:'dictionaries')]
+    protected array $dictionariesConfiguration;
+
+    public function resolveDictionaryProvider(): DictionaryProviderInterface
+    {
+        $dictionary = $this->fusionValue('dictionary');
+        $dictionaryProvider = null;
+        if (
+            is_string($dictionary)
+            && array_key_exists($dictionary, $this->dictionariesConfiguration)
+            && $this->objectManager->has($this->dictionariesConfiguration[$dictionary])
+        ) {
+            $dictionaryProvider = $this->objectManager->get($this->dictionariesConfiguration[$dictionary]);
+        }
+        if ($dictionaryProvider instanceof DictionaryProviderInterface) {
+            return $dictionaryProvider;
+        } else {
+            throw new \Exception('missing dictionary');
+        }
+    }
 
     protected function getLength(): int
     {

@@ -3,3 +3,9 @@ Neos:
     fusion:
       autoInclude:
         Sitegeist.ChitChat: true
+
+Sitegeist:
+  ChitChat:
+    dictionaries:
+      default: 'Sitegeist\ChitChat\Domain\PseudoLatinDictionaryProvider'
+

@@ -13,4 +13,6 @@ interface DictionaryProviderInterface
     public function provideWord(int $index): string;
 
     public function provideMaxWordIndex(): int;
+
+    public function provideSentenceSeparator(): string;
 }
