@@ -28,8 +28,7 @@ We use semantic-versioning so every breaking change will increase the major-vers
 
 The `Line` and `Text` prototypes generate a pseudo random text. 
 The text is much longer and structured as multiple sentences. 
-Both prototypes allow to enable formatting via `links`, `strong` 
-and `em`. 
+Both prototypes allow to enable formatting via `links`, `strong` and `em`. 
 
 ```neosfusion
 prototype(Sitegeist.ChitChat:CardExample) < prototype(Neos.Fusion:Component) {
@@ -107,9 +106,9 @@ Properties:
 - `seed` (string|null) the source of randomness in addition to the fusion path
 - `length` (int|100 bzw. 500) the maximal length the text should have
 - `variance` (float|0.5) the deviation in length that is allowed 
-- `link` (bool|false) add links to some items (<a href="#">...</s>)
-- `strong` (bool|false) make some items bold (<strong>...</strong>)
-- `em` (bool|false) emphasize some items (<em>...</em>)
+- `link` (bool|false) add links to some items `<a href="#">...</s>`
+- `strong` (bool|false) make some items bold `<strong>...</strong>`
+- `em` (bool|false) emphasize some items `<em>...</em>`
 
 ### Textblock Fusion Prototypes
 
