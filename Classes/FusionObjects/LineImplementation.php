@@ -13,9 +13,14 @@ class LineImplementation extends BaseFusionObject
     {
         $seed = crc32($this->path . ($this->fusionValue('seed') ?: ''));
 
+        $probabilityProvider = $this->resolveProbablityProvider();
+        $probabilityProvider->initialize($seed);
+
+        $dictionaryProvider = $this->resolveDictionaryProvider();
+
         $generator = new PredictableRandomTextGenerator(
-            $this->resolveDictionaryProvider(),
-            $seed
+            $dictionaryProvider,
+            $probabilityProvider
         );
 
         $maxLength = $this->getLength();

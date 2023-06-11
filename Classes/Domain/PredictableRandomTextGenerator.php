@@ -8,16 +8,13 @@ class PredictableRandomTextGenerator
 {
     public function __construct(
         protected DictionaryProviderInterface $dictionaryProvider,
-        protected int $seed = 0
+        protected ProbabilityProviderInterface $probabilityProvider
     ) {
     }
 
     protected function randomNumber(int $min, int $max): int
     {
-        mt_srand($this->seed);
-        $result = mt_rand($min, $max);
-        $this->seed = mt_rand(0, getrandmax());
-        return $result;
+        return $this->probabilityProvider->provideNumber($min, $max);
     }
 
     public function applyFormatting(string $text, bool $link = false, bool $strong = false, bool $em = false): string

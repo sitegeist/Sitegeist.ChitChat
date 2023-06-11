@@ -5,26 +5,33 @@ declare(strict_types=1);
 namespace Sitegeist\ChitChat\Tests\Utility;
 
 use PHPUnit\Framework\TestCase;
+use Sitegeist\ChitChat\Domain\DictionaryProviderInterface;
 use Sitegeist\ChitChat\Domain\FormatOption;
+use Sitegeist\ChitChat\Domain\PredictableProbabilityProvider;
 use Sitegeist\ChitChat\Domain\PredictableRandomTextGenerator;
 use Sitegeist\ChitChat\Domain\PredictableTextGenerator;
+use Sitegeist\ChitChat\Domain\ProbabilityProviderInterface;
 use Sitegeist\ChitChat\Domain\PseudoLatinDictionaryProvider;
 use Sitegeist\Noderobis\Utility\ConfigurationUtility;
 
 class PredictableRandomTextGeneratorTest extends TestCase
 {
-    protected $dictionary;
-    public function setUp(): void
-    {
-        $this->dictionary = new PseudoLatinDictionaryProvider();
-    }
 
+
+    public function createTextGeneratorWithSeed(string $seed): PredictableRandomTextGenerator
+    {
+        $dictionaryProvider = new PseudoLatinDictionaryProvider();
+        $probabilityProvider = new PredictableProbabilityProvider();
+        $probabilityProvider->initialize(crc32($seed));
+
+        return new PredictableRandomTextGenerator(
+        $dictionaryProvider,
+        $probabilityProvider
+        );
+    }
     public function testThatLinesThatAreGeneratedMatchTheRequirements (): void
     {
-        $generator = new PredictableRandomTextGenerator(
-            $this->dictionary,
-            crc32('nudelsuppe')
-        );
+        $generator = $this->createTextGeneratorWithSeed('nudelsuppe');
 
         for($i = 1; $i < 200; $i ++) {
             $line = $generator->generateLine(50, 150);
@@ -35,20 +42,9 @@ class PredictableRandomTextGeneratorTest extends TestCase
 
     public function testThatSameSeedsYieldIdenticalLines (): void
     {
-        $generator1 = new PredictableRandomTextGenerator(
-            $this->dictionary,
-            crc32('nudelsuppe')
-        );
-
-        $generator2 = new PredictableRandomTextGenerator(
-            $this->dictionary,
-            crc32('nudelsuppe')
-        );
-
-        $generator3 = new PredictableRandomTextGenerator(
-            $this->dictionary,
-            crc32('tomatensuppe')
-        );
+        $generator1 = $this->createTextGeneratorWithSeed('nudelsuppe');
+        $generator2 = $this->createTextGeneratorWithSeed('nudelsuppe');
+        $generator3 = $this->createTextGeneratorWithSeed('tomatensuppe');
 
         $text1 = $generator1->generateLine(20, 50);
         $text2 = $generator2->generateLine(20, 50);
@@ -60,10 +56,7 @@ class PredictableRandomTextGeneratorTest extends TestCase
 
     public function testThatConsecutiveCallsYieldDifferentLines (): void
     {
-        $generator = new PredictableRandomTextGenerator(
-            $this->dictionary,
-            crc32('nudelsuppe')
-        );
+        $generator = $this->createTextGeneratorWithSeed('nudelsuppe');
 
         $text1 = $generator->generateLine(20, 50);
         $text2 = $generator->generateLine(20, 50);
@@ -75,10 +68,7 @@ class PredictableRandomTextGeneratorTest extends TestCase
 
     public function testThatTextThatAreGeneratedMatchTheRequirements (): void
     {
-        $generator = new PredictableRandomTextGenerator(
-            $this->dictionary,
-            crc32('nudelsuppe')
-        );
+        $generator = $this->createTextGeneratorWithSeed('nudelsuppe');
 
         for($i = 1; $i < 200; $i ++) {
             $line = $generator->generateText(500, 1500);
@@ -89,10 +79,7 @@ class PredictableRandomTextGeneratorTest extends TestCase
 
     public function testThatTextsThatAreGeneratedMatchTheRequirements (): void
     {
-        $generator = new PredictableRandomTextGenerator(
-            $this->dictionary,
-            crc32('nudelsuppe')
-        );
+        $generator = $this->createTextGeneratorWithSeed('nudelsuppe');
 
         for($i = 1; $i < 200; $i ++) {
             $line = $generator->generateText(200, 500);
@@ -103,20 +90,9 @@ class PredictableRandomTextGeneratorTest extends TestCase
 
     public function testThatSameSeedsYieldIdenticalTexts (): void
     {
-        $generator1 = new PredictableRandomTextGenerator(
-            $this->dictionary,
-            crc32('nudelsuppe')
-        );
-
-        $generator2 = new PredictableRandomTextGenerator(
-            $this->dictionary,
-            crc32('nudelsuppe')
-        );
-
-        $generator3 = new PredictableRandomTextGenerator(
-            $this->dictionary,
-            crc32('tomatensuppe')
-        );
+        $generator1 = $this->createTextGeneratorWithSeed('nudelsuppe');
+        $generator2 = $this->createTextGeneratorWithSeed('nudelsuppe');
+        $generator3 = $this->createTextGeneratorWithSeed('tomatensuppe');
 
         $text1 = $generator1->generateText(200, 500);
         $text2 = $generator2->generateText(200, 500);
@@ -128,10 +104,7 @@ class PredictableRandomTextGeneratorTest extends TestCase
 
     public function testThatConxecutiveCallsYieldDifferentTexts (): void
     {
-        $generator = new PredictableRandomTextGenerator(
-            $this->dictionary,
-            crc32('nudelsuppe')
-        );
+        $generator = $this->createTextGeneratorWithSeed('nudelsuppe');
 
         $text1 = $generator->generateText(200, 500);
         $text2 = $generator->generateText(200, 500);
@@ -143,10 +116,7 @@ class PredictableRandomTextGeneratorTest extends TestCase
 
     public function testThatFormattingsAreApplies (): void
     {
-        $generator = new PredictableRandomTextGenerator(
-            $this->dictionary,
-            crc32('nudelsuppe')
-        );
+        $generator = $this->createTextGeneratorWithSeed('nudelsuppe');
 
         $origin = 'Lorem et Himenaeos cras Ridiculus nostra Cras congue Lectus Donec Risus. Adipiscing Dictum viverra commodo Mollis venenatis Phasellus Nam Nunc. Dolor lacinia hac Velit porttitor risus ad Ante ligula habitant.';
 
@@ -174,20 +144,9 @@ class PredictableRandomTextGeneratorTest extends TestCase
 
     public function testThatSameSeedsYieldIdenticalFormatting (): void
     {
-        $generator1 = new PredictableRandomTextGenerator(
-            $this->dictionary,
-            crc32('nudelsuppe')
-        );
-
-        $generator2 = new PredictableRandomTextGenerator(
-            $this->dictionary,
-            crc32('nudelsuppe')
-        );
-
-        $generator3 = new PredictableRandomTextGenerator(
-            $this->dictionary,
-            crc32('tomatensuppe')
-        );
+        $generator1 = $this->createTextGeneratorWithSeed('nudelsuppe');
+        $generator2 = $this->createTextGeneratorWithSeed('nudelsuppe');
+        $generator3 = $this->createTextGeneratorWithSeed('tomatensuppe');
 
         $text = 'Lorem et Himenaeos cras Ridiculus nostra Cras congue Lectus Donec Risus. Adipiscing Dictum viverra commodo Mollis venenatis Phasellus Nam Nunc. Dolor lacinia hac Velit porttitor risus ad Ante ligula habitant.';
 
@@ -201,10 +160,7 @@ class PredictableRandomTextGeneratorTest extends TestCase
 
     public function testThatConsecutiveCallsYieldDifferentFormatting (): void
     {
-        $generator = new PredictableRandomTextGenerator(
-            $this->dictionary,
-            crc32('nudelsuppe')
-        );
+        $generator = $this->createTextGeneratorWithSeed('nudelsuppe');
 
         $text = 'Lorem et Himenaeos cras Ridiculus nostra Cras congue Lectus Donec Risus. Adipiscing Dictum viverra commodo Mollis venenatis Phasellus Nam Nunc. Dolor lacinia hac Velit porttitor risus ad Ante ligula habitant.';
 
