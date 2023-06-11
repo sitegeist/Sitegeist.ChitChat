@@ -19,7 +19,7 @@ class TextImplementation extends BaseFusionObject
         );
 
         $maxLength = $this->getLength();
-        $minLength = (int) ($maxLength * $this->getVariance());
+        $minLength = (int) round($maxLength - $this->getVariance() * $maxLength);
 
         return $generator->applyFormatting(
             $generator->generateText($minLength, $maxLength),
