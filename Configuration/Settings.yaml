@@ -6,6 +6,18 @@ Neos:
 
 Sitegeist:
   ChitChat:
+
+    # the dictionary and probability to use if nothing else is specified
+    defaults:
+      dictionary: pseudoLatin
+      probability: predictable
+
+    # providers for random numbers
+    probablility:
+      predictable: 'Sitegeist\ChitChat\Domain\PredictableProbabilityProvider'
+      random: 'Sitegeist\ChitChat\Domain\RandomProbabilityProvider'
+
+    # dictionaries
     dictionaries:
-      default: 'Sitegeist\ChitChat\Domain\PseudoLatinDictionaryProvider'
+      pseudoLatin: 'Sitegeist\ChitChat\Domain\PseudoLatinDictionaryProvider'
 

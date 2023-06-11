@@ -96,20 +96,31 @@ prototype(Sitegeist.ChitChat:TextExample) < prototype(Neos.Fusion:Component) {
 
 ### Base Prototypes
 
-The base prototypes `Text` and `Line` will create text without block formatting.   
+The base prototypes `Text` and `Line` will create text without block formatting whule  
+`Number` creates integer numbers.
 
 - `Sitegeist.ChitChat:Text`:  (string) long textblock containing multiple sentences
 - `Sitegeist.ChitChat:Line`:  (string) short textblock without
+- `Sitegeist.ChitChat:Number`: (int)
 
-Properties:
+All prototypes have the properties:
 
-- `dictionary` (string|`default`) the name of the dictionaries as configured in the settings
+- `probability` (string|null) the name of the probability as configured in the settings.
 - `seed` (string|null) the source of randomness in addition to the fusion path
+
+The `Text` and `Line` prototypes support in addition:
+
+- `dictionary` (string|null) the name of the dictionaries as configured in the settings
 - `length` (int|100 bzw. 500) the maximal length the text should have
 - `variance` (float|0.5) the deviation in length that is allowed 
 - `link` (bool|false) add links to some items `<a href="#">...</s>`
 - `strong` (bool|false) make some items bold `<strong>...</strong>`
 - `em` (bool|false) emphasize some items `<em>...</em>`
+
+The `Number` prototype supports in addition:
+
+- `min` (int|0) the minimal number to create
+- `max` (int|100) the maximal number to create
 
 ### Textblock Fusion Prototypes
 
@@ -133,7 +144,39 @@ property `number` allows to specify how many items are to be generated.
 
 Additional properties:
 
-- `number` (int|5) the number of items to generate
+- `number` (int|5) the number of items to generate ... defaults to a random number between 5 and 10
+
+## Configuration
+
+The configuration allows to configure alternate implementations for  
+
+```yaml
+Sitegeist:
+  ChitChat:
+
+    # the dictionary and probability to use if nothing else is specified
+    defaults:
+      dictionary: pseudoLatin
+      probability: predictable
+
+    # providers for random numbers
+    probablility:
+      predictable: 'Sitegeist\ChitChat\Domain\PredictableProbabilityProvider'
+      random: 'Sitegeist\ChitChat\Domain\RandomProbabilityProvider'
+
+    # dictionaries
+    dictionaries:
+      pseudoLatin: 'Sitegeist\ChitChat\Domain\PseudoLatinDictionaryProvider'
+```
+
+## Randomness vs predictability
+
+While predictable text generation is important for stable tests and therefore is the default.
+The testing of frontend prototypes sometimes benefits from completely random texts that are regenerated
+on every call.
+
+To allow this the probability mode can be configured via setting `Setting` or fusion path `probability`.
+By default the modes `random` and `predictable` are available.
 
 ## Replacing the dictionary or "how to speak klingon"
 

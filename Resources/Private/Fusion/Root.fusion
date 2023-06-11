@@ -1,7 +1,8 @@
 prototype(Sitegeist.ChitChat:Text) {
   @class = "Sitegeist\\ChitChat\\FusionObjects\\TextImplementation"
   seed = null
-  dictionary = 'default'
+  dictionary = null
+  probability = null
 
   length = 500
   variance = 0.5
@@ -14,7 +15,8 @@ prototype(Sitegeist.ChitChat:Text) {
 prototype(Sitegeist.ChitChat:Line) {
   @class = "Sitegeist\\ChitChat\\FusionObjects\\LineImplementation"
   seed = null
-  dictionary = 'default'
+  dictionary = null
+  probability = null
 
   length = 100
   variance = 0.5
@@ -22,6 +24,15 @@ prototype(Sitegeist.ChitChat:Line) {
   link = false
   strong = false
   em = false
+}
+
+prototype(Sitegeist.ChitChat:Number) {
+  @class = "Sitegeist\\ChitChat\\FusionObjects\\NumberImplementation"
+  seed = null
+  probability = null
+
+  min = 100
+  max = 0.5
 }
 
 prototype(Sitegeist.ChitChat:H1) < prototype(Neos.Fusion:Component) {
@@ -70,7 +81,11 @@ prototype(Sitegeist.ChitChat:P) < prototype(Neos.Fusion:Component) {
 
 prototype(Sitegeist.ChitChat:UL) < prototype(Neos.Fusion:Component) {
 
-  number = 5
+  number = Sitegeist.ChitChat:Number {
+    min = 5
+    max = 10
+  }
+
   length = 100
 
   link = true
@@ -88,7 +103,11 @@ prototype(Sitegeist.ChitChat:UL) < prototype(Neos.Fusion:Component) {
 
 prototype(Sitegeist.ChitChat:OL) < prototype(Neos.Fusion:Component) {
 
-  number = 5
+  number = Sitegeist.ChitChat:Number {
+    min = 5
+    max = 10
+  }
+
   length = 100
 
   link = true

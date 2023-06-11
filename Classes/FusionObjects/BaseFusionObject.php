@@ -8,6 +8,7 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\ObjectManagement\ObjectManager;
 use Neos\Fusion\FusionObjects\AbstractFusionObject;
 use Sitegeist\ChitChat\Domain\DictionaryProviderInterface;
+use Sitegeist\ChitChat\Domain\ProbabilityProviderInterface;
 use Sitegeist\ChitChat\Domain\PseudoLatinDictionaryProvider;
 
 abstract class BaseFusionObject extends AbstractFusionObject
@@ -21,10 +22,23 @@ abstract class BaseFusionObject extends AbstractFusionObject
     #[Flow\InjectConfiguration(path:'dictionaries')]
     protected array $dictionariesConfiguration;
 
+    /**
+     * @var array<string,string>
+     */
+    #[Flow\InjectConfiguration(path:'probablility')]
+    protected array $probalilityConfiguration;
+
+    /**
+     * @var array<string,string>
+     */
+    #[Flow\InjectConfiguration(path:'defaults')]
+    protected array $defaultsConfiguration;
+
     public function resolveDictionaryProvider(): DictionaryProviderInterface
     {
-        $dictionary = $this->fusionValue('dictionary');
+        $dictionary = $this->fusionValue('dictionary') ?: $this->defaultsConfiguration['dictionary'] ?? null;
         $dictionaryProvider = null;
+
         if (
             is_string($dictionary)
             && array_key_exists($dictionary, $this->dictionariesConfiguration)
@@ -35,7 +49,26 @@ abstract class BaseFusionObject extends AbstractFusionObject
         if ($dictionaryProvider instanceof DictionaryProviderInterface) {
             return $dictionaryProvider;
         } else {
-            throw new \Exception('missing dictionary');
+            throw new \Exception('missing dictionary provider');
+        }
+    }
+
+    public function resolveProbablityProvider(): ProbabilityProviderInterface
+    {
+        $probability = $this->fusionValue('probability') ?: $this->defaultsConfiguration['probability'] ?? null;
+        $probabilityProvider = null;
+
+        if (
+            is_string($probability)
+            && array_key_exists($probability, $this->probalilityConfiguration)
+            && $this->objectManager->has($this->probalilityConfiguration[$probability])
+        ) {
+            $probabilityProvider = $this->objectManager->get($this->probalilityConfiguration[$probability]);
+        }
+        if ($probabilityProvider instanceof ProbabilityProviderInterface) {
+            return $probabilityProvider;
+        } else {
+            throw new \Exception('missing probability provider');
         }
     }
 
