@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "neos/fusion": "~8.0 || 8.2.x-dev || dev-main || dev-master"
+        "neos/fusion": "~8.0 || 8.2.x-dev || ^9.0 || dev-main || dev-master"
     },
     "require-dev": {
         "php": "^8.1",
